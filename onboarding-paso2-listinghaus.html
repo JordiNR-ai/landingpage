@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ListingHaus — Onboarding: Descripción general del CRM">
+  <title>Onboarding Paso 2 — ListingHaus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #2147A2;
+      --blue-mid: #2d5bc4;
+      --blue-light: #4a7de8;
+      --bg: #07070f;
+      --surface: #0d0d1a;
+      --card: #111120;
+      --border: rgba(33, 71, 162, 0.18);
+      --border-hover: rgba(33, 71, 162, 0.45);
+      --text: #eeeef8;
+      --text-muted: #5a6680;
+      --text-dim: #9aa3bc;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 3px; }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-bar-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      z-index: 200;
+      background: rgba(33,71,162,0.15);
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 66%;
+      background: linear-gradient(90deg, var(--blue), var(--blue-light));
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(7, 7, 15, 0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-logo-fallback {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo-fallback span { color: var(--blue-light); }
+    .nav-paso {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 7rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 0%, rgba(33,71,162,0.2) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 30% at 80% 70%, rgba(33,71,162,0.07) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(33,71,162,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(33,71,162,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 20%, black 10%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 20%, black 10%, transparent 75%);
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(33,71,162,0.12);
+      border: 1px solid rgba(33,71,162,0.3);
+      padding: 0.4rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--blue-light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .step-badge-dots { display: flex; gap: 5px; }
+    .step-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(74,125,232,0.3);
+      border: 1px solid rgba(74,125,232,0.5);
+    }
+    .step-dot.active {
+      background: var(--blue-light);
+      border-color: var(--blue-light);
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.06;
+      margin-bottom: 1rem;
+    }
+    .hero-title .accent {
+      background: linear-gradient(135deg, #7aaeff 0%, #2147A2 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      color: var(--text-dim);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    /* ─── CONTENT ─── */
+    .content-wrap {
+      padding: 0 2rem 5rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ─── VIDEO ─── */
+    .video-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #000;
+    }
+    .video-wrap video,
+    .video-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    .video-placeholder {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0a0a14;
+      gap: 1rem;
+    }
+    .video-placeholder-icon {
+      width: 60px; height: 60px;
+      background: rgba(33,71,162,0.2);
+      border: 1px solid rgba(33,71,162,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-caption {
+      padding: 1.25rem 1.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── INFO CARD ─── */
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+    .info-icon {
+      width: 36px; height: 36px;
+      background: rgba(33,71,162,0.15);
+      border: 1px solid rgba(33,71,162,0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+
+    /* ─── NAV BUTTONS ─── */
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue));
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 1rem 2.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.22s;
+      box-shadow: 0 4px 24px rgba(33,71,162,0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(33,71,162,0.5);
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      transition: all 0.22s;
+    }
+    .btn-back:hover {
+      color: var(--text);
+      border-color: var(--border-hover);
+    }
+
+    /* ─── REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s cubic-bezier(.22,.68,0,1.2), transform 0.6s cubic-bezier(.22,.68,0,1.2);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 3rem 2.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .footer-logo img { height: 26px; width: auto; }
+    .footer-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .footer-logo-text span { color: var(--blue-light); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.83rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-right { display: flex; align-items: center; gap: 1.25rem; }
+    .footer-copy { color: var(--text-muted); font-size: 0.82rem; }
+    .social-btn {
+      width: 36px; height: 36px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: all 0.22s;
+    }
+    .social-btn:hover {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero { padding: 6rem 1.25rem 2rem; }
+      .content-wrap { padding: 0 1.25rem 4rem; }
+      .nav-buttons { flex-direction: column-reverse; }
+      .btn-primary, .btn-back { width: 100%; justify-content: center; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── PROGRESS BAR ── -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill"></div>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav id="mainNav">
+    <a href="https://jordinr-ai.github.io/landingpage/" class="nav-logo">
+      <img src="assets/logo-white.png" alt="ListingHaus"
+           onerror="this.style.display='none'; document.getElementById('navFallback').style.display='flex'">
+      <span class="nav-logo-fallback" id="navFallback">Listing<span>Haus</span></span>
+    </a>
+    <span class="nav-paso">Paso 2 de 3</span>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div class="step-badge reveal">
+        <div class="step-badge-dots">
+          <div class="step-dot active"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+        Onboarding · Paso 2/3
+      </div>
+      <h1 class="hero-title reveal" style="transition-delay:.1s">
+        Descripción general<br><span class="accent">del CRM</span>
+      </h1>
+      <p class="hero-sub reveal" style="transition-delay:.18s">
+        Mira el vídeo completo para entender cómo funciona el CRM antes de continuar.
+      </p>
+    </div>
+  </header>
+
+  <!-- ── CONTENT ── -->
+  <main class="content-wrap">
+
+    <div class="info-card reveal">
+      <div class="info-icon">💡</div>
+      <span>Mira el vídeo completo antes de continuar al siguiente paso. Si tienes dudas escríbenos a <strong style="color:var(--blue-light)">contacto@listinghaus.agency</strong></span>
+    </div>
+
+    <div class="video-section reveal" style="transition-delay:.1s">
+      <div class="video-wrap">
+        <iframe
+          src="https://drive.google.com/file/d/1LG9Su3TalbZb1-qj75hOJ7wHa8yIXvS0/preview"
+          allow="autoplay"
+          style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
+        ></iframe>
+      </div>
+      <div class="video-caption">
+        Descripción general del CRM — Paso 2 de 3
+      </div>
+    </div>
+
+    <div class="nav-buttons reveal" style="transition-delay:.2s">
+      <a href="onboarding-listinghaus.html" class="btn-back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Volver al Paso 1
+      </a>
+      <a href="onboarding-paso3-listinghaus.html" class="btn-primary">
+        Continuar al Paso 3
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <a href="https://jordinr-ai.github.io/landingpage/" class="footer-logo">
+        <img src="assets/logo-white.png" alt="ListingHaus"
+             onerror="this.style.display='none'; document.getElementById('footerFallback').style.display='flex'">
+        <span class="footer-logo-text" id="footerFallback">Listing<span>Haus</span></span>
+      </a>
+      <ul class="footer-links">
+        <li><a href="terminos-condiciones-listinghaus.html">Términos y condiciones</a></li>
+        <li><a href="politica-privacidad-listinghaus.html">Política de privacidad</a></li>
+      </ul>
+      <div class="footer-right">
+        <a href="https://www.facebook.com/profile.php?id=61584354527425" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+        <span class="footer-copy">© 2026 ListingHaus · España</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

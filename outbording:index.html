@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ListingHaus — Onboarding: Conectar Facebook">
+  <title>Onboarding — ListingHaus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #2147A2;
+      --blue-mid: #2d5bc4;
+      --blue-light: #4a7de8;
+      --bg: #07070f;
+      --surface: #0d0d1a;
+      --card: #111120;
+      --border: rgba(33, 71, 162, 0.18);
+      --border-hover: rgba(33, 71, 162, 0.45);
+      --text: #eeeef8;
+      --text-muted: #5a6680;
+      --text-dim: #9aa3bc;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 3px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(7, 7, 15, 0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-logo-fallback {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo-fallback span { color: var(--blue-light); }
+    .nav-paso {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-bar-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      z-index: 200;
+      background: rgba(33,71,162,0.15);
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 33%;
+      background: linear-gradient(90deg, var(--blue), var(--blue-light));
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 7rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 0%, rgba(33,71,162,0.2) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 30% at 80% 70%, rgba(33,71,162,0.07) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(33,71,162,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(33,71,162,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 20%, black 10%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 20%, black 10%, transparent 75%);
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(33,71,162,0.12);
+      border: 1px solid rgba(33,71,162,0.3);
+      padding: 0.4rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--blue-light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .step-badge-dots {
+      display: flex;
+      gap: 5px;
+    }
+    .step-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(74,125,232,0.3);
+      border: 1px solid rgba(74,125,232,0.5);
+    }
+    .step-dot.active {
+      background: var(--blue-light);
+      border-color: var(--blue-light);
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.06;
+      margin-bottom: 1rem;
+    }
+    .hero-title .accent {
+      background: linear-gradient(135deg, #7aaeff 0%, #2147A2 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      color: var(--text-dim);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    /* ─── TOGGLE BUTTONS ─── */
+    .view-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text-muted);
+      transition: all 0.22s;
+      font-family: 'Inter', sans-serif;
+    }
+    .toggle-btn.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+    .toggle-btn:hover:not(.active) {
+      border-color: var(--blue-light);
+      color: var(--text);
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    .content-wrap {
+      padding: 0 2rem 5rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ─── VIDEO SECTION ─── */
+    .video-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #000;
+    }
+    .video-wrap video,
+    .video-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    .video-placeholder {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0a0a14;
+      gap: 1rem;
+    }
+    .video-placeholder-icon {
+      width: 60px; height: 60px;
+      background: rgba(33,71,162,0.2);
+      border: 1px solid rgba(33,71,162,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-caption {
+      padding: 1.25rem 1.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── STEPS SECTION ─── */
+    .steps-section { display: none; }
+    .steps-section.visible { display: block; }
+    .video-section.hidden { display: none; }
+
+    .steps-intro {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .steps-intro-icon {
+      width: 36px; height: 36px;
+      background: rgba(33,71,162,0.15);
+      border: 1px solid rgba(33,71,162,0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--blue-light);
+      font-size: 1rem;
+    }
+
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      transition: border-color 0.3s;
+    }
+    .step-card:hover { border-color: var(--border-hover); }
+    .step-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-num-badge {
+      width: 28px; height: 28px;
+      background: rgba(33,71,162,0.2);
+      border: 1px solid rgba(33,71,162,0.35);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--blue-light);
+      flex-shrink: 0;
+    }
+    .step-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .step-card-body {
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .step-card-body.has-image {
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .step-img-wrap {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .step-img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .step-img-double {
+      display: flex;
+      flex-direction: row;
+      gap: 0.75rem;
+      width: 100%;
+    }
+    .step-img-double .step-img-wrap {
+      width: 50%;
+    }
+    .step-instructions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .step-instruction {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .step-instruction-num {
+      width: 20px; height: 20px;
+      background: rgba(33,71,162,0.15);
+      border: 1px solid rgba(33,71,162,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--blue-light);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ─── CTA BUTTON ─── */
+    .cta-wrap {
+      text-align: center;
+      margin-top: 2.5rem;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue));
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 1rem 2.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.22s;
+      box-shadow: 0 4px 24px rgba(33,71,162,0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(33,71,162,0.5);
+    }
+
+    /* ─── REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s cubic-bezier(.22,.68,0,1.2), transform 0.6s cubic-bezier(.22,.68,0,1.2);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 3rem 2.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .footer-logo img { height: 26px; width: auto; }
+    .footer-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .footer-logo-text span { color: var(--blue-light); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.83rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-right { display: flex; align-items: center; gap: 1.25rem; }
+    .footer-copy { color: var(--text-muted); font-size: 0.82rem; }
+    .social-btn {
+      width: 36px; height: 36px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: all 0.22s;
+    }
+    .social-btn:hover {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero { padding: 6rem 1.25rem 2rem; }
+      .content-wrap { padding: 0 1.25rem 4rem; }
+      .step-card-body.has-image { flex-direction: column; }
+      .step-img-wrap { width: 100%; }
+      .step-img-double { width: 100%; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── PROGRESS BAR ── -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill"></div>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav id="mainNav">
+    <a href="https://jordinr-ai.github.io/landingpage/" class="nav-logo">
+      <img src="assets/logo-white.png" alt="ListingHaus"
+           onerror="this.style.display='none'; document.getElementById('navFallback').style.display='flex'">
+      <span class="nav-logo-fallback" id="navFallback">Listing<span>Haus</span></span>
+    </a>
+    <span class="nav-paso">Paso 1 de 3</span>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div class="step-badge reveal">
+        <div class="step-badge-dots">
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+        Onboarding · Paso 1/3
+      </div>
+      <h1 class="hero-title reveal" style="transition-delay:.1s">
+        Conectar<br><span class="accent">Facebook</span>
+      </h1>
+      <p class="hero-sub reveal" style="transition-delay:.18s">
+        Sigue las instrucciones para conectar tu cuenta publicitaria de Facebook con ListingHaus.
+      </p>
+
+      <!-- TOGGLE -->
+      <div class="view-toggle reveal" style="transition-delay:.24s">
+        <button class="toggle-btn active" id="btnVideo" onclick="showView('video')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          Ver vídeo
+        </button>
+        <button class="toggle-btn" id="btnImagen" onclick="showView('imagen')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+          Instrucciones en imágenes
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── CONTENT ── -->
+  <main class="content-wrap">
+
+    <!-- VIDEO VIEW -->
+    <div id="videoView">
+      <div class="video-section reveal">
+        <div class="video-wrap">
+          <!-- Sustituye el src del video por el tuyo de GHL -->
+          <iframe
+            src="https://drive.google.com/file/d/1s-ECFBfkqlVlabXSHk4y13aS3zbsNyN5/preview"
+            allow="autoplay"
+            style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
+          ></iframe>
+        </div>
+        <div class="video-caption">
+          Mira el vídeo completo antes de continuar al siguiente paso.
+        </div>
+      </div>
+      <div class="cta-wrap reveal">
+        <a href="onboarding-paso2-listinghaus.html" class="btn-primary">
+          Continuar al Paso 2
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- IMAGEN VIEW -->
+    <div id="imagenView" style="display:none;">
+
+      <div class="steps-intro reveal">
+        <div class="steps-intro-icon">📋</div>
+        <span>Sigue cada paso en orden. Si tienes dudas contacta con nosotros en <strong style="color:var(--blue-light);">contacto@listinghaus.agency</strong></span>
+      </div>
+
+      <!-- PASO 1 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">01</div>
+          <div class="step-card-title">Crea tu cuenta de Facebook</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69afcdb2c509a0d70b5aca99.png" alt="Paso 1" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Abre <strong style="color:var(--text)">Facebook.com</strong></span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Crea una cuenta personal o inicia sesión en caso de que ya tengas una.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 2 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">02</div>
+          <div class="step-card-title">Accede al Administrador de Anuncios</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69afceab8d3eae260dcb1b4d.png" alt="Paso 2" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Desplaza el ratón al menú lateral izquierdo y haz click en <strong style="color:var(--text)">"administrador de anuncios"</strong>. Si no lo ves a simple vista, presiona "ver más".</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 3 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">03</div>
+          <div class="step-card-title">Crea un Portfolio Empresarial</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69e9421bf3c67cd015485db4.png" alt="Paso 3" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Una vez cargue la página dirígete al rectángulo superior izquierdo y haz click.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Presiona <strong style="color:var(--text)">"Crear porfolio empresarial"</strong> y sigue los pasos.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 4 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">04</div>
+          <div class="step-card-title">Accede a los ajustes del Portfolio</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69e94307b1e594157530fa88.png" alt="Paso 4" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Haz click justo debajo de "porfolio empresarial" (la cuenta empresarial que acabas de crear).</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Haz click en el <strong style="color:var(--text)">símbolo de ajustes</strong>.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 5 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">05</div>
+          <div class="step-card-title">Rellena la información del negocio</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69b063b1414923d1466edb1d.png" alt="Paso 5" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Desplázate hacia <strong style="color:var(--text)">"información del negocio"</strong> en el menú izquierdo.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Rellena toda la información posible en relación a tu negocio.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 6 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">06</div>
+          <div class="step-card-title">Control de seguridad y 2FA</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69b063dc4f84ff8815ae31b8.png" alt="Paso 6" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Desplaza el menú izquierdo hacia abajo y haz click en <strong style="color:var(--text)">"control de seguridad"</strong>.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Realiza la autenticación en dos pasos.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">3</div><span>Si es posible, añade a otro administrador.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 7 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">07</div>
+          <div class="step-card-title">Añade método de pago</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-double">
+            <div class="step-img-wrap">
+              <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69e9f5faa48992f689dbf69d.png" alt="Paso 7a" loading="lazy">
+            </div>
+            <div class="step-img-wrap">
+              <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69e9f6a8a48992f689dc2101.png" alt="Paso 7b" loading="lazy">
+            </div>
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Desplaza el menú izquierdo hacia arriba hasta donde aparezca <strong style="color:var(--text)">"Facturación y pagos"</strong>.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Haz click en <strong style="color:var(--text)">"métodos de pago"</strong> y añade la tarjeta a la que quieres que se atribuyan los gastos de las campañas publicitarias.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 8 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">08</div>
+          <div class="step-card-title">Añade tu Página de Facebook</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69b063f941492340b16ee85a.png" alt="Paso 8" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Desplaza el menú izquierdo hacia arriba y haz click en <strong style="color:var(--text)">"páginas"</strong>.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Dale al botón de añadir.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">3</div><span>Haz click en la tercera opción y sigue los pasos que te aparecen en pantalla.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 9 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">09</div>
+          <div class="step-card-title">Verifica la página creada</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69b06412bfc81fbfd8528d44.png" alt="Paso 9" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Una vez creada la página, te deberá aparecer como en la imagen. Dirígete hacia la opción de <strong style="color:var(--text)">"ver en Facebook"</strong>.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 10 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">10</div>
+          <div class="step-card-title">Edita tu página de Facebook</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69b0642e47c4d9819c0a230d.png" alt="Paso 10" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Se te abrirá una pestaña con la página que has creado.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Dirígete a la opción de abajo a la izquierda y edita la página (foto de perfil, banner, información...).</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 11 -->
+      <div class="step-card reveal">
+        <div class="step-card-header">
+          <div class="step-num-badge">11</div>
+          <div class="step-card-title">Crea la cuenta publicitaria</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69b0644a13dc9c4fa074363b.png" alt="Paso 11" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Vuelve al panel y haz click en <strong style="color:var(--text)">"cuentas publicitarias"</strong>.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Haz click en añadir y dale a la primera opción.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">3</div><span>Sigue las instrucciones para crear la cuenta publicitaria.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 12 -->
+      <div class="step-card reveal" style="border-color: rgba(33,71,162,0.4);">
+        <div class="step-card-header" style="background: rgba(33,71,162,0.08);">
+          <div class="step-num-badge" style="background:rgba(33,71,162,0.35);">12</div>
+          <div class="step-card-title">Invítanos como administradores ✓</div>
+        </div>
+        <div class="step-card-body has-image">
+          <div class="step-img-wrap">
+            <img src="https://assets.cdn.filesafe.space/3MDwTJs4YrxNzAFLohgp/media/69b064617fc07c8c295fa46c.png" alt="Paso 12" loading="lazy">
+          </div>
+          <div class="step-instructions">
+            <div class="step-instruction"><div class="step-instruction-num">1</div><span>Dirígete al apartado <strong style="color:var(--text)">"personas"</strong>.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">2</div><span>Haz click en la opción de <strong style="color:var(--text)">"invitar a personas"</strong>.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">3</div><span>Introduce el correo <strong style="color:var(--blue-light)">contacto@listinghaus.agency</strong> y haz click en siguiente.</span></div>
+            <div class="step-instruction"><div class="step-instruction-num">4</div><span>Completa los siguientes pasos como te enseña el vídeo.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-wrap reveal">
+        <a href="onboarding-paso2-listinghaus.html" class="btn-primary">
+          Continuar al Paso 2
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <a href="https://jordinr-ai.github.io/landingpage/" class="footer-logo">
+        <img src="assets/logo-white.png" alt="ListingHaus"
+             onerror="this.style.display='none'; document.getElementById('footerFallback').style.display='flex'">
+        <span class="footer-logo-text" id="footerFallback">Listing<span>Haus</span></span>
+      </a>
+      <ul class="footer-links">
+        <li><a href="terminos-condiciones-listinghaus.html">Términos y condiciones</a></li>
+        <li><a href="politica-privacidad-listinghaus.html">Política de privacidad</a></li>
+      </ul>
+      <div class="footer-right">
+        <a href="https://www.facebook.com/profile.php?id=61584354527425" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+        <span class="footer-copy">© 2026 ListingHaus · España</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // NAV scroll
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // REVEAL
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // TOGGLE VIEW
+    function showView(view) {
+      const videoView = document.getElementById('videoView');
+      const imagenView = document.getElementById('imagenView');
+      const btnVideo = document.getElementById('btnVideo');
+      const btnImagen = document.getElementById('btnImagen');
+
+      if (view === 'video') {
+        videoView.style.display = 'block';
+        imagenView.style.display = 'none';
+        btnVideo.classList.add('active');
+        btnImagen.classList.remove('active');
+      } else {
+        videoView.style.display = 'none';
+        imagenView.style.display = 'block';
+        btnVideo.classList.remove('active');
+        btnImagen.classList.add('active');
+        document.querySelectorAll('#imagenView .reveal').forEach(el => io.observe(el));
+      }
+    }
+  </script>
+</body>
+</html>
