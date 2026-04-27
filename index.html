@@ -1158,7 +1158,7 @@
           <div style="width:100%; margin:0 auto; background:#12121e;">
             <iframe
               id="ghl-calendar"
-              src="https://api.leadconnectorhq.com/widget/booking/IyNub6TyUfj3a0lK9o4u?backgroundColor=%2312121eFF&primaryColor=%23FFFFFFFF&buttonText=Agendar+Llamada&showCalendarTitle=false&showCalendarDescription=false&showCalendarDetails=false&default=false"
+              src="https://api.leadconnectorhq.com/widget/booking/IyNub6TyUfj3a0lK9o4u?backgroundColor=%2312121eFF&primaryColor=%23FFFFFFFF&buttonText=Agendar+Llamada&showCalendarTitle=false&showCalendarDescription=false&showCalendarDetails=false&default=false&redirectUrl=https%3A%2F%2Fjordinr-ai.github.io%2Flandingpage%2Fconfirmacion-llamada-listinghaus.html"
               style="width:100%; height:780px; border:none; display:block; background:#12121e;"
               scrolling="no"
               title="Agendar llamada con ListingHaus"
@@ -1169,9 +1169,25 @@
               var iframe = document.getElementById('ghl-calendar');
               if (!iframe) return;
               var data = e.data;
-              if (typeof data === 'string') { try { data = JSON.parse(data); } catch(err) { return; } }
-              if (data && data.height && data.height > 100) {
-                iframe.style.height = (data.height + 20) + 'px';
+              var raw = typeof data === 'string' ? data : '';
+              if (typeof data === 'string') { try { data = JSON.parse(data); } catch(err) { data = {}; } }
+              // Resize
+              var h = data.height || data.calendarHeight || (data.data && data.data.height);
+              if (h && h > 100) iframe.style.height = (parseInt(h) + 20) + 'px';
+              // Redirect on any booking confirmation signal
+              var isConfirmed =
+                data.event === 'booking_confirmed' ||
+                data.action === 'booking_confirmed' ||
+                data.type === 'booking_confirmed' ||
+                data.status === 'booked' ||
+                data.appointmentBooked === true ||
+                data.formSubmitted === true ||
+                (data.action && data.action === 'appointmentBookingWidget' && data.status === 'success') ||
+                raw.includes('booking_confirmed') ||
+                raw.includes('appointmentBooked') ||
+                raw.includes('"booked"');
+              if (isConfirmed) {
+                window.location.href = 'confirmacion-llamada-listinghaus.html';
               }
             });
           </script>
