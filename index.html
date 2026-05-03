@@ -238,8 +238,31 @@
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      transition: all 0.25s;
+      transition: background 0.25s, box-shadow 0.25s;
       box-shadow: 0 0 40px rgba(33,71,162,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+      position: relative;
+      overflow: hidden;
+      animation: btnFloat 3s ease-in-out infinite;
+    }
+    @keyframes btnFloat {
+      0%, 100% { transform: translateY(0); box-shadow: 0 0 40px rgba(33,71,162,0.5), inset 0 1px 0 rgba(255,255,255,0.15); }
+      50%       { transform: translateY(-5px); box-shadow: 0 12px 50px rgba(33,71,162,0.65), inset 0 1px 0 rgba(255,255,255,0.15); }
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+      animation: shimmer 1.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes shimmer {
+      0%   { left: -60%; }
+      50%  { left: 130%; }
+      100% { left: 130%; }
     }
     .btn-primary:hover {
       background: var(--blue-mid);
@@ -831,11 +854,14 @@
       .reveal-left.visible, .reveal-right.visible {
         transform: translateY(0);
       }
-      #ghl-calendar {
-        height: 1050px !important;
-      }
       .cta-tags {
         display: none;
+      }
+      .cta-box {
+        padding: 1.75rem 1rem;
+      }
+      section {
+        padding: 3rem 1rem;
       }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -1323,7 +1349,6 @@
     <div class="orb orb-3"></div>
 
     <div class="hero-content">
-      <!-- Logo centrado -->
       <div style="margin-bottom:2.5rem;">
         <img src="assets/logo-white.png" alt="ListingHaus"
              style="height:56px; width:auto;"
@@ -1335,26 +1360,26 @@
 
       <div class="hero-badge">
         <span class="hero-badge-dot"></span>
-        Marketing Inmobiliario · España
+        Meta Ads · Solo agencias inmobiliarias
       </div>
 
       <h1 class="hero-title">
-        Las propiedades<br>
-        <span class="line-accent">se captan mal</span>
+        Meta Ads para<br>
+        <span class="line-accent">agencias inmobiliarias</span>
       </h1>
 
       <p class="hero-sub">
-        Llamadas en frío, referidos y portales. Las agencias inmobiliarias líderes consiguen que los propietarios lleguen a ellos — no al revés.
+        Campañas en Facebook e Instagram para que los propietarios contacten con tu agencia. Especialistas en el sector inmobiliario.
       </p>
 
       <div class="hero-actions">
         <a href="#contacto" class="btn-primary">
-          Agendar llamada gratuita
+          Reservar llamada gratuita
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <a href="#diferenciadores" class="btn-secondary">Descubrir el método</a>
+        <a href="#proceso" class="btn-secondary">Cómo funciona</a>
       </div>
 
       <div class="garantia-hero-box">
@@ -1393,30 +1418,66 @@
     </div>
   </header>
 
-  <!-- ── PROBLEM STRIP ── -->
-  <div class="problem-strip">
-    <p class="problem-strip-label reveal">Por qué los métodos tradicionales ya no funcionan</p>
-    <div class="problem-grid">
-      <div class="problem-card reveal">
-        <div class="problem-x">✕</div>
-        <h3 class="problem-title">Llamadas en frío</h3>
-        <p class="problem-text">Intrusivas y cada vez menos efectivas. Los propietarios no cogen el teléfono a números desconocidos y los que lo hacen ya tienen decenas de agencias llamándoles.</p>
-      </div>
-      <div class="problem-card reveal" style="transition-delay:.1s">
-        <div class="problem-x">✕</div>
-        <h3 class="problem-title">Referidos y boca a boca</h3>
-        <p class="problem-text">Impredecibles y no escalables. No puedes planificar el crecimiento de tu agencia sobre algo que no controlas y que depende de que alguien te recomiende.</p>
-      </div>
-      <div class="problem-card reveal" style="transition-delay:.2s">
-        <div class="problem-x">✕</div>
-        <h3 class="problem-title">Portales inmobiliarios</h3>
-        <p class="problem-text">Los propietarios publican en portales y reciben 20 llamadas de agencias distintas. Tú compites por precio, no por valor. Y el propietario acaba agotado de tanto comercial.</p>
-      </div>
-    </div>
-    <div class="problem-bridge reveal" style="transition-delay:.3s">
-      Las agencias que siempre tienen propiedades en cartera han dejado de perseguir propietarios — <span>hacen que los propietarios les encuentren a ellas</span>
+  <!-- ── BENEFITS STRIP ── -->
+  <div class="strip reveal">
+    <div class="strip-inner">
+      <div class="strip-item"><div class="strip-icon">🏢</div> Solo agencias inmobiliarias</div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><div class="strip-icon">📍</div> Campañas por zona y perfil</div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><div class="strip-icon">📊</div> Visibilidad total de resultados</div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><div class="strip-icon">🔓</div> Sin permanencia forzada</div>
     </div>
   </div>
+
+  <!-- ── CALENDARIO (arriba) ── -->
+  <section class="cta-section" id="contacto" style="padding-top:4rem; padding-bottom:4rem;">
+    <div class="container">
+      <div class="cta-box reveal-scale">
+        <div class="cta-inner">
+          <p class="section-label" style="justify-content:center; display:flex;">Llamada gratuita · 20–40 min · Videollamada</p>
+          <h2 class="section-title" style="margin-bottom:0.75rem;">
+            Reserva tu llamada
+          </h2>
+          <p class="section-sub" style="max-width:480px; margin:0 auto 2rem; font-size:0.97rem;">
+            Analizamos tu agencia y tu zona. Te decimos si podemos ayudarte — o no.
+          </p>
+
+          <div style="width:100%; border-radius:12px; background:#12121e; overflow:hidden;">
+            <iframe
+              id="gNCAfWjNIFFEWA7F8thp_1777812563515"
+              src="https://api.leadconnectorhq.com/widget/booking/IyNub6TyUfj3a0lK9o4u?backgroundColor=%23131325FF&primaryColor=%232d5bc4FF&buttonText=Agendar+Llamada&showCalendarTitle=false&showCalendarDescription=false&showCalendarDetails=false&default=false&redirectUrl=https%3A%2F%2Fjordinr-ai.github.io%2Flandingpage%2Fconfirmacion-llamada-listinghaus.html"
+              style="width:100%; border:none; overflow:hidden; display:block; background:#12121e;"
+              scrolling="no"
+              title="Agendar llamada con ListingHaus"
+            ></iframe>
+          </div>
+          <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
+          <script>
+            window.addEventListener('message', function(e) {
+              var data = e.data;
+              var raw  = typeof data === 'string' ? data : '';
+              if (typeof data === 'string') { try { data = JSON.parse(data); } catch(_) { data = {}; } }
+              if (!data || typeof data !== 'object') data = {};
+              var confirmed =
+                data.event === 'booking_confirmed' || data.action === 'booking_confirmed' ||
+                data.type  === 'booking_confirmed' || data.status === 'booked' ||
+                data.appointmentBooked === true    || data.formSubmitted === true ||
+                raw.includes('booking_confirmed')  || raw.includes('appointmentBooked') || raw.includes('"booked"');
+              if (confirmed) window.location.href = 'confirmacion-llamada-listinghaus.html';
+            });
+          </script>
+
+          <div class="cta-tags" style="margin-top:1.25rem;">
+            <div class="cta-tag"><span class="cta-tag-check">✓</span> Gratuita</div>
+            <div class="cta-tag"><span class="cta-tag-check">✓</span> Sin compromiso</div>
+            <div class="cta-tag"><span class="cta-tag-check">✓</span> Solo agencias inmobiliarias</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ── DIFERENCIADORES ── -->
   <section class="diff-section" id="diferenciadores">
@@ -1425,11 +1486,11 @@
         <div>
           <p class="section-label reveal">Por qué ListingHaus</p>
           <h2 class="section-title reveal" style="transition-delay:.1s">
-            No somos una agencia<br>de marketing cualquiera
+            Especialistas en<br>agencias inmobiliarias
           </h2>
         </div>
         <p class="section-sub reveal" style="transition-delay:.15s; align-self:end">
-          Nos especializamos exclusivamente en el sector inmobiliario porque creemos que la especialización genera mejores resultados que la generalización.
+          Solo trabajamos con agencias inmobiliarias. Campañas estructuradas para mejorar la captación mediante Meta Ads.
         </p>
       </div>
 
@@ -1437,162 +1498,33 @@
         <div class="diff-card reveal" style="transition-delay:0s">
           <div class="diff-icon">🏢</div>
           <h3 class="diff-title">Solo sector inmobiliario</h3>
-          <p class="diff-text">No trabajamos con restaurantes, gimnasios ni e-commerce. Toda nuestra energía va dirigida a entender la dinámica del mercado inmobiliario y cómo convertirla en clientes para tu agencia.</p>
+          <p class="diff-text">Toda nuestra experiencia está enfocada en el mercado inmobiliario. Sin clientes de otros sectores que diluyan el foco.</p>
         </div>
         <div class="diff-card reveal" style="transition-delay:.1s">
           <div class="diff-icon">📈</div>
-          <h3 class="diff-title">Resultados, no métricas inservibles</h3>
-          <p class="diff-text">Los "me gusta" y las comparticiones no pagan las facturas. Nos centramos en contactos reales interesados en comprar o vender, medibles y rastreables desde el primer día.</p>
+          <h3 class="diff-title">Enfoque en captación real</h3>
+          <p class="diff-text">Campañas estructuradas para generar contactos de propietarios interesados, no métricas de visibilidad.</p>
         </div>
         <div class="diff-card reveal" style="transition-delay:.2s">
-          <div class="diff-icon">👥</div>
-          <h3 class="diff-title">Contactos cualificados</h3>
-          <p class="diff-text">Filtramos para que lleguen compradores o vendedores realmente interesados, no curiosos que solo quieren saber precios. Tu equipo de ventas habla con gente que ya quiere actuar.</p>
+          <div class="diff-icon">📍</div>
+          <h3 class="diff-title">Adaptado a tu zona</h3>
+          <p class="diff-text">Cada campaña se configura según tu mercado local, tu tipo de cliente y tus objetivos de captación.</p>
         </div>
         <div class="diff-card reveal" style="transition-delay:.3s">
           <div class="diff-icon">🔍</div>
           <h3 class="diff-title">Transparencia total</h3>
-          <p class="diff-text">Tendrás visibilidad completa de dónde viene cada contacto, cuánto cuesta cada lead y cómo evolucionan tus campañas. Sin letra pequeña ni informes confusos.</p>
+          <p class="diff-text">Acceso completo a los datos de campaña. Sabes exactamente qué se está haciendo y qué resultados genera.</p>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ── PROCESO ── -->
-  <section id="proceso">
-    <div class="container">
-      <div class="process-inner">
-        <div class="reveal-left">
-          <p class="section-label">El proceso</p>
-          <h2 class="section-title">Así trabajamos<br>contigo</h2>
-          <p class="section-sub" style="margin-bottom:3rem">
-            Un proceso sencillo, transparente y sin compromiso de continuidad. Seguimos solo si hay resultados.
-          </p>
-          <div class="process-steps-list">
-            <div class="process-step">
-              <div class="step-left">
-                <div class="step-num">01</div>
-                <div class="step-line"></div>
-              </div>
-              <div class="step-body">
-                <h3 class="step-title">Llamada de diagnóstico</h3>
-                <p class="step-text">Analizamos tu agencia, tu mercado y tus objetivos. Si creemos que podemos ayudarte, te lo decimos. Si no, también.</p>
-              </div>
-            </div>
-            <div class="process-step">
-              <div class="step-left">
-                <div class="step-num">02</div>
-                <div class="step-line"></div>
-              </div>
-              <div class="step-body">
-                <h3 class="step-title">Lanzamos las campañas</h3>
-                <p class="step-text">Configuramos y activamos campañas en Facebook e Instagram optimizadas para tu zona y perfil de cliente. Todo listo en pocos días.</p>
-              </div>
-            </div>
-            <div class="process-step">
-              <div class="step-left">
-                <div class="step-num">03</div>
-                <div class="step-line"></div>
-              </div>
-              <div class="step-body">
-                <h3 class="step-title">Contactos cualificados</h3>
-                <p class="step-text">Recibes contactos de personas interesadas en comprar o vender. Tú te centras en cerrar. Nosotros optimizamos continuamente las campañas.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="reveal-right">
-          <div class="process-card">
-            <p class="pc-label">ListingHaus vs. agencia genérica</p>
-            <div class="comparison-row">
-              <div class="comparison-header bad">Agencia genérica</div>
-              <div class="comparison-header good">ListingHaus</div>
-            </div>
-            <div class="comparison-row">
-              <div class="comparison-cell bad"><span class="cell-icon">✕</span> Clientes de todos los sectores</div>
-              <div class="comparison-cell good"><span class="cell-icon" style="color:var(--blue-light)">✓</span> Solo agencias inmobiliarias</div>
-            </div>
-            <div class="comparison-row">
-              <div class="comparison-cell bad"><span class="cell-icon">✕</span> Métricas de vanidad (likes, shares)</div>
-              <div class="comparison-cell good"><span class="cell-icon" style="color:var(--blue-light)">✓</span> Contactos medibles y rastreables</div>
-            </div>
-            <div class="comparison-row">
-              <div class="comparison-cell bad"><span class="cell-icon">✕</span> Leads fríos sin cualificar</div>
-              <div class="comparison-cell good"><span class="cell-icon" style="color:var(--blue-light)">✓</span> Compradores y vendedores activos</div>
-            </div>
-            <div class="comparison-row">
-              <div class="comparison-cell bad"><span class="cell-icon">✕</span> Informes confusos o parciales</div>
-              <div class="comparison-cell good"><span class="cell-icon" style="color:var(--blue-light)">✓</span> Visibilidad total en tiempo real</div>
-            </div>
-            <div class="comparison-row">
-              <div class="comparison-cell bad"><span class="cell-icon">✕</span> Contratos de permanencia</div>
-              <div class="comparison-cell good"><span class="cell-icon" style="color:var(--blue-light)">✓</span> Sin compromiso de continuidad</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── WHY ── -->
-  <section class="why-section">
-    <div class="container">
-      <div class="why-grid">
-        <div class="reveal-left">
-          <p class="section-label">Nuestra filosofía</p>
-          <h2 class="section-title">
-            Solo trabajamos donde<br>podemos ganar
-          </h2>
-          <p class="section-sub">
-            Antes de aceptar cualquier cliente, evaluamos si el mercado y la agencia tienen potencial real. Si no lo vemos, rechazamos el proyecto — porque preferimos decirte la verdad que cobrarte sin resultados.
-          </p>
-          <div class="why-features">
-            <div class="why-feature">
-              <div class="why-check">✓</div>
-              <div class="why-feature-body">
-                <div class="why-feature-title">Evaluación previa sin coste</div>
-                <div class="why-feature-text">Analizamos tu mercado y tu agencia antes de comprometernos con nada.</div>
-              </div>
-            </div>
-            <div class="why-feature">
-              <div class="why-check">✓</div>
-              <div class="why-feature-body">
-                <div class="why-feature-title">Sin permanencia forzada</div>
-                <div class="why-feature-text">Seguimos trabajando juntos si los resultados lo justifican. Punto.</div>
-              </div>
-            </div>
-            <div class="why-feature">
-              <div class="why-check">✓</div>
-              <div class="why-feature-body">
-                <div class="why-feature-title">Acceso completo a tus datos</div>
-                <div class="why-feature-text">Métricas de campañas en tiempo real, sin filtros ni intermediarios.</div>
-              </div>
-            </div>
-            <div class="why-feature">
-              <div class="why-check">✓</div>
-              <div class="why-feature-body">
-                <div class="why-feature-title">Comunicación directa</div>
-                <div class="why-feature-text">Sin cuentas de cliente ni capas de gestión. Hablas con quien gestiona tus campañas.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="why-visual-wrap reveal-right">
-          <div class="why-main-card">
-            <div class="big-quote">"</div>
-            <p class="quote-text">
-              Si no vemos el potencial de resultados reales para tu agencia, preferimos no aceptar el proyecto. Solo trabajamos donde podemos ganar — y eso es lo que nos diferencia.
-            </p>
-            <div class="quote-tag">
-              <img src="assets/logo-white.png" alt="" style="height:20px; width:auto;"
-                   onerror="this.style.display='none'">
-              <div class="quote-tag-dot"></div>
-              El equipo ListingHaus · Barcelona
-            </div>
-          </div>
-        </div>
+      <div class="reveal" style="text-align:center; margin-top:3rem;">
+        <a href="#contacto" class="btn-primary" style="display:inline-flex;">
+          Reservar llamada gratuita
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.85rem;">Gratuita · 20–40 min · Sin compromiso</p>
       </div>
     </div>
   </section>
@@ -1602,8 +1534,8 @@
     <div class="faq-inner">
       <div class="faq-left reveal-left">
         <p class="section-label">Preguntas frecuentes</p>
-        <h2 class="section-title">Todo lo que necesitas saber antes de reservar</h2>
-        <p class="section-sub">Si tienes cualquier otra duda escríbenos a <span style="color:var(--blue-light)">contacto@listinghaus.agency</span></p>
+        <h2 class="section-title">Dudas habituales</h2>
+        <p class="section-sub">¿Algo más? <span style="color:var(--blue-light)">contacto@listinghaus.agency</span></p>
       </div>
       <div class="faq-list">
         <div class="faq-item reveal" style="transition-delay:.1s">
@@ -1611,130 +1543,21 @@
             ¿Cuánto cuesta el servicio?
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-a">Depende de tu zona, tus objetivos y el volumen de captación que quieras conseguir. Lo vemos juntos en la llamada, sin compromiso. Si los números no cuadran para tu situación, te lo decimos con honestidad.</div>
+          <div class="faq-a">Depende de tu zona y objetivos. Lo vemos juntos en la llamada. Si los números no cuadran, te lo decimos.</div>
         </div>
         <div class="faq-item reveal" style="transition-delay:.15s">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-            ¿Funciona esto en mi zona?
-            <span class="faq-icon">+</span>
-          </div>
-          <div class="faq-a">Antes de comprometernos con nada analizamos tu mercado: si hay demanda suficiente, si la competencia lo complica, si hay potencial real. Si no lo vemos claro, te lo decimos — preferimos rechazar un proyecto que cobrar sin resultados.</div>
-        </div>
-        <div class="faq-item reveal" style="transition-delay:.2s">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-            ¿Y si ya tengo portales contratados?
-            <span class="faq-icon">+</span>
-          </div>
-          <div class="faq-a">Son canales complementarios, no excluyentes. Este sistema llega a propietarios que aún no han publicado en portales — o que ya están hartos de que les llamen 20 agencias por el mismo piso.</div>
-        </div>
-        <div class="faq-item reveal" style="transition-delay:.25s">
           <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
             ¿Hay contrato de permanencia?
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-a">No. Trabajamos sin permanencia forzada. Seguimos juntos si tiene sentido para los dos. Si en algún momento decides parar, lo paramos — sin penalizaciones ni letra pequeña.</div>
+          <div class="faq-a">No. Si en algún momento decides parar, lo paramos — sin penalizaciones.</div>
         </div>
-        <div class="faq-item reveal" style="transition-delay:.3s">
+        <div class="faq-item reveal" style="transition-delay:.2s">
           <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-            ¿Cuánto tiempo hasta ver los primeros contactos?
+            ¿Cuándo empiezan a llegar contactos?
             <span class="faq-icon">+</span>
           </div>
-          <div class="faq-a">Depende del mercado y del presupuesto de campaña. Lo que sí hacemos es ser transparentes con los tiempos reales desde el principio — sin promesas infladas para cerrar el contrato.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── CTA ── -->
-  <section class="cta-section" id="contacto">
-    <div class="container">
-      <div class="cta-box reveal-scale">
-        <div class="cta-inner">
-          <!-- Logo en CTA -->
-          <div style="margin-bottom:2rem;">
-            <img src="assets/logo-white.png" alt="ListingHaus" style="height:44px; width:auto;"
-                 onerror="this.style.display='none'; document.getElementById('ctaLogoFallback').style.display='block'">
-            <div id="ctaLogoFallback" style="display:none; font-family:'Space Grotesk',sans-serif; font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; color:var(--text);">
-              Listing<span style="color:var(--blue-light)">Haus</span>
-            </div>
-          </div>
-
-          <p class="section-label" style="justify-content:center; display:flex;">Empieza aquí</p>
-          <h2 class="section-title" style="margin-bottom:1.2rem;">
-            ¿Quieres que los propietarios<br>lleguen a ti?
-          </h2>
-          <p class="section-sub" style="max-width:560px; margin:0 auto 2.5rem;">
-            Reserva una llamada gratuita. Analizamos tu agencia y tu mercado, y te decimos si podemos ayudarte — o no.
-          </p>
-
-          <!-- Qué pasa en la llamada -->
-          <div class="call-box">
-            <div class="call-box-header">
-              <div class="call-box-title">¿Qué pasa en la llamada?</div>
-              <div class="call-badge">✓ Gratuita · Sin compromiso</div>
-            </div>
-            <div class="call-steps-list">
-              <div class="call-step">
-                <div class="call-step-num">1</div>
-                <span>Analizamos tu agencia, tu zona y cómo estás captando propiedades ahora mismo.</span>
-              </div>
-              <div class="call-step">
-                <div class="call-step-num">2</div>
-                <span>Te explicamos cómo funciona el sistema y si tiene sentido para tu mercado concreto.</span>
-              </div>
-              <div class="call-step">
-                <div class="call-step-num">3</div>
-                <span>Si encajamos, te decimos exactamente qué haríamos. Si no encajamos, también te lo decimos.</span>
-              </div>
-            </div>
-            <div class="call-meta">
-              <div class="call-meta-item"><div class="call-dot"></div> 20–40 minutos</div>
-              <div class="call-meta-item"><div class="call-dot"></div> Por videollamada</div>
-              <div class="call-meta-item"><div class="call-dot"></div> Sin compromiso</div>
-            </div>
-          </div>
-
-          <div style="width:100%; margin:0 auto; background:#12121e;">
-            <iframe
-              id="ghl-calendar"
-              src="https://api.leadconnectorhq.com/widget/booking/IyNub6TyUfj3a0lK9o4u?backgroundColor=%23131325FF&primaryColor=+%232d5bc4FF&buttonText=Agendar+Llamada&showCalendarTitle=false&showCalendarDescription=false&showCalendarDetails=false&default=false&redirectUrl=https%3A%2F%2Fjordinr-ai.github.io%2Flandingpage%2Fconfirmacion-llamada-listinghaus.html"
-              style="width:100%; height:780px; border:none; display:block; background:#12121e;"
-              scrolling="no"
-              title="Agendar llamada con ListingHaus"
-            ></iframe>
-          </div>
-          <script>
-            window.addEventListener('message', function(e) {
-              var iframe = document.getElementById('ghl-calendar');
-              if (!iframe) return;
-              var data = e.data;
-              var raw = typeof data === 'string' ? data : '';
-              if (typeof data === 'string') { try { data = JSON.parse(data); } catch(err) { data = {}; } }
-              // Resize
-              var h = data.height || data.calendarHeight || (data.data && data.data.height);
-              if (h && h > 100) iframe.style.height = (parseInt(h) + 20) + 'px';
-              // Redirect on any booking confirmation signal
-              var isConfirmed =
-                data.event === 'booking_confirmed' ||
-                data.action === 'booking_confirmed' ||
-                data.type === 'booking_confirmed' ||
-                data.status === 'booked' ||
-                data.appointmentBooked === true ||
-                data.formSubmitted === true ||
-                (data.action && data.action === 'appointmentBookingWidget' && data.status === 'success') ||
-                raw.includes('booking_confirmed') ||
-                raw.includes('appointmentBooked') ||
-                raw.includes('"booked"');
-              if (isConfirmed) {
-                window.location.href = 'confirmacion-llamada-listinghaus.html';
-              }
-            });
-          </script>
-          <div class="cta-tags" style="margin-top:0.5rem;">
-            <div class="cta-tag"><span class="cta-tag-check">✓</span> Sin compromiso</div>
-            <div class="cta-tag"><span class="cta-tag-check">✓</span> Respuesta en menos de 24h</div>
-            <div class="cta-tag"><span class="cta-tag-check">✓</span> Solo agencias inmobiliarias</div>
-          </div>
+          <div class="faq-a">Depende del mercado y el presupuesto de campaña. Somos transparentes con los plazos desde el inicio.</div>
         </div>
       </div>
     </div>
