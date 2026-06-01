@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NoReels — Bloquea Instagram Reels y YouTube Shorts directamente en las apps. Recupera el foco y el control de tu tiempo.">
+  <title>NoReels — Bloquea Reels y Shorts en Instagram y YouTube</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:       #e53e3e;
+      --red-mid:   #c53030;
+      --red-light: #fc8181;
+      --orange:    #f97316;
+      --red-glow:  rgba(229, 62, 62, 0.35);
+      --bg:        #0a0708;
+      --surface:   #120d0d;
+      --card:      #180f0f;
+      --border:    rgba(229, 62, 62, 0.15);
+      --border-hover: rgba(229, 62, 62, 0.5);
+      --text:      #f5f0f0;
+      --text-muted: #5e4f4f;
+      --text-dim:  #9e8f8f;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, backdrop-filter 0.4s, border-bottom 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(10, 7, 8, 0.90);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: var(--red);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .nav-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+    .nav-logo-text span { color: var(--red-light); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--red) !important;
+      color: white !important;
+      padding: 0.55rem 1.35rem !important;
+      border-radius: 50px !important;
+      font-weight: 600 !important;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
+      box-shadow: 0 0 20px rgba(229,62,62,0.4) !important;
+    }
+    .nav-cta:hover {
+      background: var(--red-mid) !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 0 35px rgba(229,62,62,0.6) !important;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(229,62,62,0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 15% 80%, rgba(249,115,22,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 85% 60%, rgba(229,62,62,0.08) 0%, transparent 55%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(229,62,62,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(229,62,62,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .orb-1 { width: 500px; height: 500px; background: rgba(229,62,62,0.15); top: -100px; left: -100px; animation: floatOrb 12s ease-in-out infinite; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(249,115,22,0.10); bottom: -80px; right: -80px; animation: floatOrb 15s ease-in-out infinite reverse; }
+    .orb-3 { width: 300px; height: 300px; background: rgba(229,62,62,0.08); top: 40%; left: 60%; animation: floatOrb 10s ease-in-out infinite 2s; }
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-30px) scale(1.05); }
+      66% { transform: translate(-20px,20px) scale(0.97); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 860px;
+    }
+
+    /* App icon display */
+    .hero-platforms {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .app-icon-wrap {
+      position: relative;
+    }
+    .app-icon {
+      width: 64px; height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .app-icon-ig { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+    .app-icon-yt { background: #ff0000; }
+    .block-badge {
+      position: absolute;
+      top: -6px; right: -6px;
+      width: 22px; height: 22px;
+      background: var(--bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      border: 2px solid var(--red);
+    }
+    .platform-arrow {
+      color: var(--red);
+      font-size: 1.25rem;
+      opacity: 0.7;
+    }
+    .app-icon-nr {
+      width: 64px; height: 64px;
+      background: var(--red);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 0 30px rgba(229,62,62,0.5);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(229,62,62,0.12);
+      border: 1px solid rgba(229,62,62,0.35);
+      padding: 0.4rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--red-light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.75rem;
+      backdrop-filter: blur(10px);
+    }
+    .hero-badge-dot {
+      width: 7px; height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; box-shadow: 0 0 6px #4ade80; }
+      50% { opacity: 0.4; box-shadow: none; }
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      font-weight: 700;
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.4rem;
+    }
+    .hero-title .line-accent {
+      display: block;
+      background: linear-gradient(135deg, #fc8181 0%, #f97316 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--text-dim);
+      max-width: 520px;
+      margin: 0 auto 2.2rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: white;
+      padding: 1rem 2.4rem;
+      border-radius: 50px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.2s;
+      box-shadow: 0 0 40px rgba(229,62,62,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+      position: relative;
+      overflow: hidden;
+      animation: btnFloat 3s ease-in-out infinite;
+    }
+    @keyframes btnFloat {
+      0%, 100% { transform: translateY(0); box-shadow: 0 0 40px rgba(229,62,62,0.5), inset 0 1px 0 rgba(255,255,255,0.15); }
+      50%       { transform: translateY(-5px); box-shadow: 0 12px 50px rgba(229,62,62,0.65), inset 0 1px 0 rgba(255,255,255,0.15); }
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
+      animation: shimmer 1.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes shimmer { 0% { left: -60%; } 50%, 100% { left: 130%; } }
+    .btn-primary:hover { background: var(--red-mid); transform: translateY(-2px); box-shadow: 0 0 60px rgba(229,62,62,0.7); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-dim);
+      padding: 1rem 2.4rem;
+      border-radius: 50px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: all 0.25s;
+    }
+    .btn-secondary:hover { color: white; border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.04); }
+
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      padding-top: 1rem;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--red-light);
+    }
+    .hero-stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .hero-stat-div { width: 1px; height: 40px; background: var(--border); }
+
+    /* ─── COMMON ─── */
+    section { padding: 4.5rem 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.73rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--red-light); margin-bottom: 0.85rem;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; letter-spacing: -0.03em; line-height: 1.12; margin-bottom: 1.2rem;
+    }
+    .section-sub { font-size: 1.05rem; color: var(--text-dim); line-height: 1.75; }
+
+    /* ─── REVEAL ─── */
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.7s cubic-bezier(.22,.68,0,1.2), transform 0.7s cubic-bezier(.22,.68,0,1.2); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-36px); transition: opacity 0.7s cubic-bezier(.22,.68,0,1.2), transform 0.7s cubic-bezier(.22,.68,0,1.2); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(36px); transition: opacity 0.7s cubic-bezier(.22,.68,0,1.2), transform 0.7s cubic-bezier(.22,.68,0,1.2); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.93); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    /* ─── STRIP ─── */
+    .strip {
+      padding: 2.5rem 2rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .strip-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: 2.5rem; flex-wrap: wrap;
+    }
+    .strip-item { display: flex; align-items: center; gap: 0.7rem; color: var(--text-dim); font-size: 0.88rem; font-weight: 500; }
+    .strip-icon {
+      width: 34px; height: 34px;
+      background: rgba(229,62,62,0.10);
+      border: 1px solid var(--border); border-radius: 9px;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;
+    }
+    .strip-div { width: 1px; height: 28px; background: var(--border); }
+
+    /* ─── PROBLEM ─── */
+    .problem-section { background: var(--surface); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+    .problem-card {
+      background: var(--card);
+      border: 1px solid rgba(229,62,62,0.15);
+      border-radius: 18px;
+      padding: 2rem;
+    }
+    .problem-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.2rem; font-weight: 700;
+      color: var(--red); opacity: 0.6;
+      line-height: 1; margin-bottom: 0.5rem;
+    }
+    .problem-title { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .problem-text { font-size: 0.87rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ─── FEATURES ─── */
+    .features-section { background: var(--bg); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2.2rem;
+      transition: all 0.32s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity: 0;
+      transition: opacity 0.32s;
+    }
+    .feature-card:hover { border-color: var(--border-hover); transform: translateY(-5px); box-shadow: 0 24px 60px rgba(229,62,62,0.1); }
+    .feature-card:hover::after { opacity: 1; }
+    .feature-icon {
+      width: 50px; height: 50px;
+      background: rgba(229,62,62,0.10);
+      border: 1px solid rgba(229,62,62,0.22);
+      border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.3rem; font-size: 1.4rem;
+    }
+    .feature-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.7rem; }
+    .feature-text { color: var(--text-muted); font-size: 0.88rem; line-height: 1.72; }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-section { background: var(--surface); }
+    .how-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .steps-list { display: flex; flex-direction: column; gap: 0; }
+    .step { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2.5rem; }
+    .step:last-child { padding-bottom: 0; }
+    .step-left { display: flex; flex-direction: column; align-items: center; }
+    .step-num {
+      width: 44px; height: 44px;
+      background: var(--red); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.95rem;
+      color: white; flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(229,62,62,0.5);
+      position: relative; z-index: 1;
+    }
+    .step-line {
+      width: 1px; flex: 1;
+      background: linear-gradient(to bottom, var(--red), transparent);
+      margin-top: 0.5rem; min-height: 40px;
+    }
+    .step:last-child .step-line { display: none; }
+    .step-body { padding-top: 0.5rem; }
+    .step-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.08rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .step-text { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; }
+
+    /* Phone mockup */
+    .phone-mockup {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      padding: 1.5rem;
+      max-width: 280px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .phone-mockup::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(229,62,62,0.2) 0%, transparent 70%);
+    }
+    .phone-screen {
+      background: #0d0d0d;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+    .phone-app-bar {
+      padding: 0.75rem 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.78rem; font-weight: 600;
+    }
+    .phone-app-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .blocked-feed {
+      padding: 0.75rem;
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .feed-item {
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; color: var(--text-muted);
+      position: relative; overflow: hidden;
+    }
+    .feed-item.blocked {
+      background: rgba(229,62,62,0.06);
+      border: 1px solid rgba(229,62,62,0.2);
+    }
+    .blocked-label {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.72rem; color: var(--red-light);
+      font-weight: 600;
+    }
+
+    /* ─── PLATFORMS ─── */
+    .platforms-section { background: var(--bg); text-align: center; }
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      max-width: 700px;
+      margin: 2.5rem auto 0;
+    }
+    .platform-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .platform-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .platform-card:hover { border-color: var(--border-hover); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(229,62,62,0.1); }
+    .platform-card:hover::after { opacity: 1; }
+    .platform-logo { font-size: 3rem; margin-bottom: 1rem; display: block; }
+    .platform-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .platform-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+    .platform-tag {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      margin-top: 1rem;
+      background: rgba(229,62,62,0.08);
+      border: 1px solid rgba(229,62,62,0.2);
+      border-radius: 50px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--red-light);
+    }
+
+    /* ─── CTA ─── */
+    .cta-section { position: relative; overflow: hidden; text-align: center; }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 30% 50%, rgba(229,62,62,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 75% 50%, rgba(249,115,22,0.12) 0%, transparent 60%);
+    }
+    .cta-box {
+      position: relative;
+      background: var(--card);
+      border: 1px solid rgba(229,62,62,0.30);
+      border-radius: 28px;
+      padding: 3.5rem 3rem;
+      max-width: 820px; margin: 0 auto;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+    }
+    .cta-box::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(229,62,62,0.12) 0%, transparent 65%);
+    }
+    .cta-inner { position: relative; z-index: 1; }
+    .cta-tags {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.5rem; margin-top: 1.75rem; flex-wrap: wrap;
+    }
+    .cta-tag { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--text-muted); }
+    .cta-tag-check { color: #4ade80; font-size: 0.75rem; }
+
+    /* ─── FAQ ─── */
+    .faq-section { background: var(--surface); }
+    .faq-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 5rem; align-items: start;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .faq-left { position: sticky; top: 7rem; }
+    .faq-left .section-sub { margin-top: 1rem; }
+    .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      position: relative;
+    }
+    .faq-item::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .faq-item.open { border-color: rgba(229,62,62,0.4); box-shadow: 0 8px 32px rgba(229,62,62,0.08); }
+    .faq-item.open::before { opacity: 1; }
+    .faq-q {
+      padding: 1.35rem 1.5rem;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600;
+      color: var(--text); cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      user-select: none;
+    }
+    .faq-icon {
+      width: 26px; height: 26px;
+      background: rgba(229,62,62,0.08); border: 1px solid rgba(229,62,62,0.22);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      color: var(--red-light); font-size: 1.1rem; font-weight: 300; flex-shrink: 0;
+      transition: transform 0.28s cubic-bezier(.22,.68,0,1.2), background 0.25s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); background: rgba(229,62,62,0.18); }
+    .faq-a {
+      padding: 0 1.5rem; max-height: 0; overflow: hidden;
+      transition: max-height 0.38s ease, padding 0.38s ease;
+      font-size: 0.88rem; color: var(--text-dim); line-height: 1.85;
+    }
+    .faq-item.open .faq-a { max-height: 250px; padding: 0 1.5rem 1.4rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 3rem 2.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .footer-logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+    .footer-logo-icon { width: 26px; height: 26px; background: var(--red); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+    .footer-logo-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+    .footer-logo-text span { color: var(--red-light); }
+    .footer-copy { color: var(--text-muted); font-size: 0.82rem; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .how-inner { grid-template-columns: 1fr; gap: 3.5rem; }
+      .faq-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .faq-left { position: static; }
+    }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .platforms-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 2.4rem; }
+      section { padding: 3rem 1.25rem; }
+      .cta-box { padding: 2rem 1.25rem; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .hero-stats { gap: 1.25rem; }
+      .hero-stat-div { display: none; }
+      .strip-div { display: none; }
+    }
+    @media (max-width: 768px) {
+      .reveal-left, .reveal-right { transform: translateY(24px); }
+      .reveal-left.visible, .reveal-right.visible { transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1; transform: none; transition: none; }
+      .orb { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav id="mainNav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">🚫</div>
+      <span class="nav-logo-text">No<span>Reels</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#como-funciona">Cómo funciona</a></li>
+      <li><a href="#funcionalidades">Funcionalidades</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#descargar" class="nav-cta">Descargar gratis</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero-content">
+
+      <div class="hero-platforms">
+        <div class="app-icon-wrap">
+          <div class="app-icon app-icon-ig">📸</div>
+          <div class="block-badge">🚫</div>
+        </div>
+        <span class="platform-arrow">+</span>
+        <div class="app-icon-wrap">
+          <div class="app-icon app-icon-yt">▶</div>
+          <div class="block-badge">🚫</div>
+        </div>
+        <span class="platform-arrow">→</span>
+        <div class="app-icon-nr">🧘</div>
+      </div>
+
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Bloqueo de contenido · Instagram &amp; YouTube
+      </div>
+
+      <h1 class="hero-title">
+        Usa las apps.<br>
+        <span class="line-accent">Sin Reels ni Shorts.</span>
+      </h1>
+
+      <p class="hero-sub">
+        NoReels bloquea los Reels de Instagram y los Shorts de YouTube directamente en las apps, sin desinstalarlas. Recupera el control de tu atención.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#descargar" class="btn-primary">
+          Descargar gratis
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 3v8M4 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#como-funciona" class="btn-secondary">Ver cómo funciona</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">2,3h</div>
+          <div class="hero-stat-label">tiempo medio diario en redes</div>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">68%</div>
+          <div class="hero-stat-label">de ese tiempo son Reels/Shorts</div>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">0 min</div>
+          <div class="hero-stat-label">de contenido corto con NoReels</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── STRIP ── -->
+  <div class="strip reveal">
+    <div class="strip-inner">
+      <div class="strip-item"><div class="strip-icon">📱</div> Android &amp; iOS</div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><div class="strip-icon">⚡</div> Activo en 30 segundos</div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><div class="strip-icon">🔒</div> Sin acceso a tus datos</div>
+      <div class="strip-div"></div>
+      <div class="strip-item"><div class="strip-icon">🆓</div> 100% gratuito</div>
+    </div>
+  </div>
+
+  <!-- ── PROBLEMA ── -->
+  <section class="problem-section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">El problema</p>
+        <h2 class="section-title">Los Reels y Shorts están<br>diseñados para engancharte</h2>
+        <p class="section-sub" style="max-width:580px;">El scroll infinito de contenido corto activa el mismo mecanismo de recompensa que las máquinas tragaperras. No es falta de voluntad — es diseño.</p>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card reveal" style="transition-delay:.05s">
+          <div class="problem-num">01</div>
+          <h3 class="problem-title">Algoritmo adictivo</h3>
+          <p class="problem-text">Instagram y YouTube optimizan su algoritmo para que sigas viendo más. Cada vez que ves un video corto, el sistema aprende qué te engancha más.</p>
+        </div>
+        <div class="problem-card reveal" style="transition-delay:.12s">
+          <div class="problem-num">02</div>
+          <h3 class="problem-title">Dopamina en bucle</h3>
+          <p class="problem-text">Los videos de 15-60 segundos generan picos de dopamina constantes que dificultan concentrarse en tareas que requieren atención sostenida.</p>
+        </div>
+        <div class="problem-card reveal" style="transition-delay:.18s">
+          <div class="problem-num">03</div>
+          <h3 class="problem-title">Imposible parar</h3>
+          <p class="problem-text">Abres la app para ver algo concreto y 45 minutos después sigues en el feed de Reels. La aplicación no tiene un botón de "basta". NoReels sí.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CÓMO FUNCIONA ── -->
+  <section class="how-section" id="como-funciona">
+    <div class="container">
+      <div class="how-inner">
+        <div>
+          <p class="section-label reveal">Cómo funciona</p>
+          <h2 class="section-title reveal" style="transition-delay:.08s">Activado en<br>30 segundos</h2>
+          <p class="section-sub reveal" style="transition-delay:.12s; margin-bottom:2.5rem;">NoReels intercepta la navegación dentro de Instagram y YouTube y redirige o cierra automáticamente las secciones de Reels y Shorts antes de que aparezcan.</p>
+
+          <div class="steps-list">
+            <div class="step reveal" style="transition-delay:.15s">
+              <div class="step-left">
+                <div class="step-num">1</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-body">
+                <h4 class="step-title">Descarga e instala NoReels</h4>
+                <p class="step-text">Disponible en Google Play y App Store. La instalación tarda menos de un minuto.</p>
+              </div>
+            </div>
+            <div class="step reveal" style="transition-delay:.2s">
+              <div class="step-left">
+                <div class="step-num">2</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-body">
+                <h4 class="step-title">Activa el permiso de accesibilidad</h4>
+                <p class="step-text">NoReels usa el servicio de accesibilidad de Android (o Screen Time en iOS) para detectar cuándo entras en la sección de Reels o Shorts.</p>
+              </div>
+            </div>
+            <div class="step reveal" style="transition-delay:.25s">
+              <div class="step-left">
+                <div class="step-num">3</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-body">
+                <h4 class="step-title">Elige qué bloquear</h4>
+                <p class="step-text">Selecciona si quieres bloquear solo Reels de Instagram, solo YouTube Shorts, o ambos. También puedes establecer horarios permitidos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-right" style="transition-delay:.1s">
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <!-- Instagram mockup -->
+              <div class="phone-app-bar">
+                <div class="phone-app-dot" style="background:linear-gradient(135deg,#f58529,#dd2a7b);"></div>
+                <span style="font-size:0.75rem; color:var(--text-dim);">Instagram</span>
+              </div>
+              <div class="blocked-feed">
+                <div class="feed-item" style="height:80px; background:rgba(255,255,255,0.03);">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">📷 Foto de amigo</span>
+                </div>
+                <div class="feed-item blocked" style="height:80px;">
+                  <div class="blocked-label">
+                    <span>🚫</span>
+                    <span>Reels bloqueados por NoReels</span>
+                  </div>
+                </div>
+                <div class="feed-item" style="height:64px; background:rgba(255,255,255,0.03);">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">💬 Historia</span>
+                </div>
+              </div>
+
+              <!-- YouTube mockup -->
+              <div class="phone-app-bar" style="margin-top:0.5rem; border-top: 1px solid rgba(255,255,255,0.06);">
+                <div class="phone-app-dot" style="background:#ff0000;"></div>
+                <span style="font-size:0.75rem; color:var(--text-dim);">YouTube</span>
+              </div>
+              <div class="blocked-feed">
+                <div class="feed-item" style="height:64px; background:rgba(255,255,255,0.03);">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">▶ Video largo</span>
+                </div>
+                <div class="feed-item blocked" style="height:64px;">
+                  <div class="blocked-label">
+                    <span>🚫</span>
+                    <span>Shorts bloqueados</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FUNCIONALIDADES ── -->
+  <section class="features-section" id="funcionalidades">
+    <div class="container">
+      <div style="text-align:center; max-width:600px; margin:0 auto 1rem;">
+        <p class="section-label reveal">Funcionalidades</p>
+        <h2 class="section-title reveal" style="transition-delay:.08s">Control total.<br>Sin complicaciones.</h2>
+        <p class="section-sub reveal" style="transition-delay:.12s;">Todo lo que necesitas para recuperar tu tiempo y atención, sin perder acceso a las partes útiles de las apps.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal" style="transition-delay:0s">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Bloqueo selectivo</h3>
+          <p class="feature-text">Bloquea solo Reels, solo Shorts, o ambos. Puedes seguir usando el resto de Instagram y YouTube con total normalidad: fotos, videos largos, mensajes, búsquedas.</p>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:.1s">
+          <div class="feature-icon">⏰</div>
+          <h3 class="feature-title">Horarios permitidos</h3>
+          <p class="feature-text">Define ventanas horarias en las que el bloqueo se desactiva. Por ejemplo, 30 minutos los viernes por la tarde como recompensa semanal.</p>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:.18s">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Estadísticas de tiempo</h3>
+          <p class="feature-text">Consulta cuántas veces intentaste acceder a Reels/Shorts y cuánto tiempo has recuperado esta semana. El progreso visible hace que el hábito se consolide.</p>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:.26s">
+          <div class="feature-icon">🔐</div>
+          <h3 class="feature-title">Bloqueo con PIN</h3>
+          <p class="feature-text">Activa el modo estricto con un PIN para que no puedas desactivar el bloqueo en un momento de impulso. El PIN solo lo conoces tú (o un amigo de confianza).</p>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:.34s">
+          <div class="feature-icon">🔕</div>
+          <h3 class="feature-title">Sin notificaciones de contenido corto</h3>
+          <p class="feature-text">Bloquea automáticamente las notificaciones de Instagram y YouTube que intentan llevarte a ver Reels o Shorts. Solo recibes lo importante.</p>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:.42s">
+          <div class="feature-icon">🌐</div>
+          <h3 class="feature-title">También en el navegador</h3>
+          <p class="feature-text">Extensión para Chrome y Safari que bloquea instagram.com/reels y youtube.com/shorts cuando accedes desde el móvil o el ordenador.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PLATAFORMAS ── -->
+  <section class="platforms-section">
+    <div class="container">
+      <p class="section-label reveal">Plataformas bloqueadas</p>
+      <h2 class="section-title reveal" style="transition-delay:.08s; max-width:500px; margin:0 auto 0.5rem;">Funciona con<br>Instagram y YouTube</h2>
+      <p class="section-sub reveal" style="transition-delay:.12s; max-width:420px; margin:0 auto;">Bloqueo preciso en las dos principales fuentes de contenido corto adictivo.</p>
+
+      <div class="platforms-grid">
+        <div class="platform-card reveal" style="transition-delay:.12s">
+          <span class="platform-logo">📸</span>
+          <h3 class="platform-name">Instagram Reels</h3>
+          <p class="platform-desc">Bloquea la pestaña de Reels y cualquier Reel que aparezca en el feed principal. Puedes seguir viendo fotos, historias y IGTV.</p>
+          <span class="platform-tag">🚫 Reels bloqueados</span>
+        </div>
+        <div class="platform-card reveal" style="transition-delay:.18s">
+          <span class="platform-logo">▶️</span>
+          <h3 class="platform-name">YouTube Shorts</h3>
+          <p class="platform-desc">Bloquea la pestaña de Shorts y redirige automáticamente cualquier Short al feed normal. Los videos largos funcionan con total normalidad.</p>
+          <span class="platform-tag">🚫 Shorts bloqueados</span>
+        </div>
+      </div>
+
+      <div class="reveal" style="margin-top:2rem; text-align:center;">
+        <p style="font-size:0.85rem; color:var(--text-muted);">
+          Próximamente: TikTok · Facebook Reels · X/Twitter
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA DESCARGA ── -->
+  <section class="cta-section" id="descargar">
+    <div class="container">
+      <div class="cta-box reveal-scale">
+        <div class="cta-inner">
+          <p class="section-label" style="justify-content:center; display:flex;">Descarga gratuita · Android &amp; iOS</p>
+          <h2 class="section-title" style="margin-bottom:0.75rem;">
+            Recupera tu atención<br>hoy mismo
+          </h2>
+          <p class="section-sub" style="max-width:460px; margin:0 auto 2rem; font-size:0.97rem;">
+            Descarga NoReels gratis. Sin suscripción, sin anuncios, sin acceso a tus datos. Solo bloqueo.
+          </p>
+
+          <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+            <a href="#" class="btn-primary" style="animation:none;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.28.07 2.18.82 3 .87 1.13-.23 2.21-1 3.41-.9 1.44.13 2.53.7 3.24 1.78-2.97 1.78-2.27 5.7.35 6.82-.35.89-.82 1.78-2 4.29zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+              </svg>
+              App Store (iOS)
+            </a>
+            <a href="#" class="btn-primary" style="animation:none; background: linear-gradient(135deg, #01875f, #34a853);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3.18 23.76a2 2 0 0 0 2.73.73l9.78-5.65-2.75-2.76-9.76 7.68zM20.93 10.37l-2.65-1.53-3.02 3.02 3.02 3.02 2.66-1.54a2 2 0 0 0 0-2.97zM1.05 1.24a2 2 0 0 0-.05.5v20.52c0 .17.02.34.05.5l.1.1 11.5-11.5v-.27L1.15 1.14l-.1.1zm13.09 12.52-2.65-2.65-10.44 10.44c.7.44 1.6.42 2.3-.09l10.79-7.7z"/>
+              </svg>
+              Google Play (Android)
+            </a>
+          </div>
+
+          <div class="cta-tags" style="margin-top:1.5rem;">
+            <div class="cta-tag"><span class="cta-tag-check">✓</span> 100% gratuito</div>
+            <div class="cta-tag"><span class="cta-tag-check">✓</span> Sin registro</div>
+            <div class="cta-tag"><span class="cta-tag-check">✓</span> Sin acceso a tus datos</div>
+            <div class="cta-tag"><span class="cta-tag-check">✓</span> Sin anuncios</div>
+          </div>
+
+          <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1.5rem;">
+            Extensión para Chrome y Safari también disponible
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section class="faq-section" id="faq">
+    <div class="faq-inner">
+      <div class="faq-left reveal-left">
+        <p class="section-label">Preguntas frecuentes</p>
+        <h2 class="section-title">Dudas habituales</h2>
+        <p class="section-sub">¿Más preguntas? <span style="color:var(--red-light);">hola@noreels.app</span></p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item reveal" style="transition-delay:.05s">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            ¿Necesito desinstalar Instagram o YouTube?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">No. NoReels bloquea solo la sección de Reels/Shorts dentro de las apps. Sigues pudiendo usar el resto de Instagram y YouTube con total normalidad.</div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:.1s">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            ¿Cómo funciona técnicamente el bloqueo?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">En Android usa el servicio de accesibilidad para detectar cuándo la pantalla muestra contenido de Reels o Shorts, y lo cierra automáticamente antes de que cargue. En iOS usa Screen Time API para restringir esas secciones específicas.</div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:.15s">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            ¿Accede NoReels a mis mensajes o fotos?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">No. NoReels solo lee el nombre de la pantalla activa para detectar si estás en Reels o Shorts. No accede, lee ni almacena ningún contenido de tus apps ni de tu dispositivo.</div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:.2s">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            ¿Funciona si Instagram o YouTube se actualiza?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Publicamos actualizaciones regulares de NoReels para mantener la compatibilidad con las últimas versiones de Instagram y YouTube. Las actualizaciones son automáticas y gratuitas.</div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:.25s">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            ¿Puedo desactivarlo temporalmente?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Sí. Puedes desactivar el bloqueo desde la app con un toque. Si activas el modo estricto con PIN, tendrás que introducirlo para desactivarlo — lo que da tiempo a reconsiderar el impulso.</div>
+        </div>
+        <div class="faq-item reveal" style="transition-delay:.3s">
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            ¿Es realmente gratis? ¿Hay versión de pago?
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Las funciones principales (bloqueo de Reels y Shorts, estadísticas básicas) son gratuitas para siempre. Existe una versión Pro con horarios avanzados, modo familiar para múltiples perfiles y estadísticas detalladas por 1,99€/mes.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <a href="#" class="footer-logo">
+        <div class="footer-logo-icon">🚫</div>
+        <span class="footer-logo-text">No<span>Reels</span></span>
+      </a>
+      <p style="font-size:0.82rem; color:var(--text-muted); max-width:340px; line-height:1.6;">
+        NoReels no está afiliado con Meta ni con Google. Instagram y YouTube son marcas registradas de sus respectivos propietarios.
+      </p>
+      <span class="footer-copy">© 2026 NoReels · hola@noreels.app</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0 });
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
+      .forEach(el => io.observe(el));
+
+    const heroContent = document.querySelector('.hero-content');
+    if (heroContent) {
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 10;
+        const y = (e.clientY / window.innerHeight - 0.5) * 7;
+        heroContent.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      document.querySelectorAll('.orb').forEach((orb, i) => {
+        orb.style.transform = `translateY(${y * ([0.15, 0.1, 0.2][i] || 0.1)}px)`;
+      });
+    }, { passive: true });
+  </script>
+</body>
+</html>
