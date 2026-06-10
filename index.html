@@ -141,9 +141,10 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(33,71,162,0.28) 0%, transparent 65%),
-        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(33,71,162,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 30% at 80% 60%, rgba(74,125,232,0.1) 0%, transparent 55%);
+        radial-gradient(ellipse 100% 80% at 50% -5%, rgba(33,71,162,0.42) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 15% 85%, rgba(33,71,162,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 35% at 85% 65%, rgba(74,125,232,0.14) 0%, transparent 50%),
+        radial-gradient(ellipse 35% 30% at 70% 15%, rgba(120,60,220,0.1) 0%, transparent 50%);
     }
     /* Animated grid */
     .hero-grid {
@@ -1339,6 +1340,148 @@
       color: var(--text-muted);
       margin-top: 1rem;
     }
+
+    /* ── CUSTOM VIDEO PLAYER ── */
+    .vsl-wrap {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto 2rem;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(74,125,232,0.3), 0 0 80px rgba(33,71,162,0.38), 0 40px 80px rgba(0,0,0,0.5);
+      background: #000;
+      position: relative;
+    }
+    .vsl-video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      cursor: pointer;
+    }
+    /* Big play overlay */
+    .vsl-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(7,7,15,0.55);
+      backdrop-filter: blur(2px);
+      transition: opacity 0.3s;
+      cursor: pointer;
+      border-radius: 16px;
+    }
+    .vsl-overlay.hidden { opacity: 0; pointer-events: none; }
+    .vsl-play-big {
+      width: 76px; height: 76px;
+      background: var(--blue);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 0 12px rgba(33,71,162,0.2), 0 0 60px rgba(33,71,162,0.6);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .vsl-play-big:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 0 16px rgba(33,71,162,0.25), 0 0 80px rgba(33,71,162,0.8);
+    }
+    .vsl-play-big svg { margin-left: 4px; }
+    /* Controls bar */
+    .vsl-controls {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.75rem 1rem 0.85rem;
+      background: linear-gradient(to top, rgba(7,7,15,0.95) 0%, rgba(7,7,15,0.7) 70%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .vsl-wrap:hover .vsl-controls,
+    .vsl-wrap.paused .vsl-controls { opacity: 1; }
+    :fullscreen .vsl-controls,
+    :-webkit-full-screen .vsl-controls { opacity: 1; }
+    /* Progress */
+    .vsl-progress {
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 3px;
+      margin-bottom: 0.65rem;
+      cursor: pointer;
+      position: relative;
+    }
+    .vsl-progress:hover { height: 5px; margin-bottom: calc(0.65rem - 2px); }
+    .vsl-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue-light), var(--blue-mid));
+      border-radius: 3px;
+      width: 0%;
+      position: relative;
+      transition: width 0.1s linear;
+    }
+    .vsl-progress-fill::after {
+      content: '';
+      position: absolute;
+      right: -5px; top: 50%;
+      transform: translateY(-50%);
+      width: 10px; height: 10px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(74,125,232,0.8);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .vsl-progress:hover .vsl-progress-fill::after { opacity: 1; }
+    /* Bottom row */
+    .vsl-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .vsl-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.85);
+      cursor: pointer;
+      padding: 0.2rem;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+    .vsl-btn:hover { color: white; }
+    .vsl-time {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .vsl-spacer { flex: 1; }
+    .vsl-vol-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .vsl-vol-slider {
+      -webkit-appearance: none;
+      width: 64px;
+      height: 3px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+    .vsl-vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px; height: 10px;
+      background: var(--blue-light);
+      border-radius: 50%;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -1366,18 +1509,13 @@
     <div class="orb orb-3"></div>
 
     <div class="hero-content">
-      <div style="margin-bottom:2.5rem;">
+      <div style="margin-bottom:2rem;">
         <img src="assets/logo-white.png" alt="ListingHaus"
              style="height:56px; width:auto;"
              onerror="this.style.display='none'; document.getElementById('heroLogoFallback').style.display='block'">
         <div id="heroLogoFallback" style="display:none; font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; letter-spacing:-0.03em;">
           Listing<span style="color:var(--blue-light)">Haus</span>
         </div>
-      </div>
-
-      <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        Meta Ads · Solo agencias inmobiliarias
       </div>
 
       <h1 class="hero-title">
@@ -1391,6 +1529,114 @@
       <p class="hero-sub">
         Gestionamos tus campañas en Meta Ads para que los propietarios de tu zona te contacten a ti, no a la competencia. Solo trabajamos con agencias inmobiliarias.
       </p>
+
+      <div class="vsl-wrap paused" id="vslWrap">
+        <video class="vsl-video" id="vslVideo" src="vsl.mp4" poster="vsl-poster.jpg" preload="metadata" playsinline></video>
+
+        <!-- Play overlay -->
+        <div class="vsl-overlay" id="vslOverlay">
+          <button class="vsl-play-big" id="vslPlayBig" aria-label="Reproducir">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M8 5.5L22.5 14L8 22.5V5.5Z" fill="white"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Controls -->
+        <div class="vsl-controls" id="vslControls">
+          <div class="vsl-progress" id="vslProgress">
+            <div class="vsl-progress-fill" id="vslFill"></div>
+          </div>
+          <div class="vsl-row">
+            <button class="vsl-btn" id="vslPlayPause" aria-label="Play/Pause">
+              <svg id="iconPlay" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 3.5L14.5 9L5 14.5V3.5Z" fill="white"/></svg>
+              <svg id="iconPause" width="18" height="18" viewBox="0 0 18 18" fill="none" style="display:none"><rect x="4" y="3" width="3.5" height="12" rx="1" fill="white"/><rect x="10.5" y="3" width="3.5" height="12" rx="1" fill="white"/></svg>
+            </button>
+            <span class="vsl-time" id="vslTime">0:00 / 0:00</span>
+            <div class="vsl-spacer"></div>
+            <div class="vsl-vol-wrap">
+              <button class="vsl-btn" id="vslMute" aria-label="Silenciar">
+                <svg id="iconVol" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5H6L10 3V15L6 11.5H3V6.5Z" fill="white"/><path d="M13 6C13.8 7 14.3 8 14.3 9C14.3 10 13.8 11 13 12" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+                <svg id="iconMuted" width="18" height="18" viewBox="0 0 18 18" fill="none" style="display:none"><path d="M3 6.5H6L10 3V15L6 11.5H3V6.5Z" fill="white"/><line x1="13" y1="6" x2="16" y2="12" stroke="white" stroke-width="1.3" stroke-linecap="round"/><line x1="16" y1="6" x2="13" y2="12" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </button>
+              <input type="range" class="vsl-vol-slider" id="vslVol" min="0" max="1" step="0.05" value="1">
+            </div>
+            <button class="vsl-btn" id="vslFs" aria-label="Pantalla completa">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5V3H6.5M11.5 3H15V6.5M15 11.5V15H11.5M6.5 15H3V11.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+      (function(){
+        var wrap = document.getElementById('vslWrap');
+        var vid  = document.getElementById('vslVideo');
+        var overlay = document.getElementById('vslOverlay');
+        var fill = document.getElementById('vslFill');
+        var timeEl = document.getElementById('vslTime');
+        var progress = document.getElementById('vslProgress');
+        var iconPlay = document.getElementById('iconPlay');
+        var iconPause = document.getElementById('iconPause');
+        var iconVol = document.getElementById('iconVol');
+        var iconMuted = document.getElementById('iconMuted');
+
+        function fmt(s) {
+          var m = Math.floor(s/60), sec = Math.floor(s%60);
+          return m+':'+(sec<10?'0':'')+sec;
+        }
+        function setPlaying(p) {
+          overlay.classList.toggle('hidden', p);
+          wrap.classList.toggle('paused', !p);
+          iconPlay.style.display  = p ? 'none' : '';
+          iconPause.style.display = p ? '' : 'none';
+        }
+
+        document.getElementById('vslPlayBig').onclick = function(){ vid.play(); };
+        document.getElementById('vslPlayPause').onclick = function(){ vid.paused ? vid.play() : vid.pause(); };
+        vid.addEventListener('play',  function(){ setPlaying(true); });
+        vid.addEventListener('pause', function(){ setPlaying(false); });
+        vid.addEventListener('ended', function(){ setPlaying(false); });
+        vid.addEventListener('click', function(){ vid.paused ? vid.play() : vid.pause(); });
+
+        vid.addEventListener('timeupdate', function(){
+          var pct = vid.duration ? (vid.currentTime/vid.duration*100) : 0;
+          fill.style.width = pct+'%';
+          timeEl.textContent = fmt(vid.currentTime)+' / '+fmt(vid.duration||0);
+        });
+
+        progress.addEventListener('click', function(e){
+          var r = progress.getBoundingClientRect();
+          vid.currentTime = ((e.clientX-r.left)/r.width) * vid.duration;
+        });
+
+        document.getElementById('vslMute').onclick = function(){
+          vid.muted = !vid.muted;
+          iconVol.style.display   = vid.muted ? 'none' : '';
+          iconMuted.style.display = vid.muted ? '' : 'none';
+        };
+        document.getElementById('vslVol').oninput = function(){ vid.volume = this.value; };
+        var fsBtn = document.getElementById('vslFs');
+        fsBtn.onclick = function(){
+          var inFs = document.fullscreenElement || document.webkitFullscreenElement;
+          if(inFs) {
+            if(document.exitFullscreen) document.exitFullscreen();
+            else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+          } else {
+            if(wrap.requestFullscreen) wrap.requestFullscreen();
+            else if(wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+          }
+        };
+        document.addEventListener('fullscreenchange', updateFsIcon);
+        document.addEventListener('webkitfullscreenchange', updateFsIcon);
+        function updateFsIcon(){
+          var inFs = document.fullscreenElement || document.webkitFullscreenElement;
+          fsBtn.innerHTML = inFs
+            ? '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6.5 3V6.5H3M15 6.5H11.5V3M11.5 15V11.5H15M3 11.5H6.5V15" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            : '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5V3H6.5M11.5 3H15V6.5M15 11.5V15H11.5M6.5 15H3V11.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        }
+      })();
+      </script>
 
       <div class="hero-actions">
         <a href="#contacto" class="btn-primary">
