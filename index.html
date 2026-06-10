@@ -910,8 +910,6 @@
       .hero-title { font-size: 2.8rem !important; line-height: 1.1; margin-bottom: 0.85rem; }
       .hero-sub { font-size: 0.92rem; margin-bottom: 1.25rem; }
       .hero-actions { gap: 0.75rem; margin-bottom: 1.25rem; }
-      /* Controles visibles en móvil cuando está reproduciendo */
-      .vsl-wrap:not(.paused) .vsl-controls { opacity: 1 !important; }
       /* Ocultar volumen y pantalla completa en móvil */
       .vsl-vol-wrap, #vslFs { display: none !important; }
       .btn-primary { padding: 0.85rem 1.75rem; font-size: 0.95rem; }
@@ -1676,9 +1674,11 @@
       </div>
 
       <script>
-      var ytPlayer, vslTimer, pendingPlay=false;
+      var ytPlayer, vslTimer, pendingPlay=false, ctrlHideTimer;
+      var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       var wrap    = document.getElementById('vslWrap');
       var overlay = document.getElementById('vslOverlay');
+      var controls= document.getElementById('vslControls');
       var fill    = document.getElementById('vslFill');
       var timeEl  = document.getElementById('vslTime');
       var progress= document.getElementById('vslProgress');
@@ -1688,13 +1688,26 @@
       var iconMuted=document.getElementById('iconMuted');
       var fsBtn   = document.getElementById('vslFs');
 
+      function showControlsBriefly(){
+        if(!isMobile)return;
+        controls.style.opacity='1';
+        clearTimeout(ctrlHideTimer);
+        ctrlHideTimer=setTimeout(function(){controls.style.opacity='';},3000);
+      }
+
       function fmt(s){var m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
       function setPlaying(p){
         overlay.classList.toggle('hidden',p);
         wrap.classList.toggle('paused',!p);
         iconPlay.style.display=p?'none':'';
         iconPause.style.display=p?'':'none';
+        if(p)showControlsBriefly();
       }
+
+      /* Toque en el vídeo mientras reproduce → muestra controles en móvil */
+      wrap.addEventListener('touchstart',function(){
+        if(!wrap.classList.contains('paused'))showControlsBriefly();
+      },{passive:true});
       function tick(){
         if(!ytPlayer||typeof ytPlayer.getCurrentTime!=='function')return;
         var cur=ytPlayer.getCurrentTime()||0, dur=ytPlayer.getDuration()||0;
