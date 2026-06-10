@@ -907,7 +907,11 @@
       /* Hero más compacto y aireado */
       .hero { padding: 5.5rem 1.25rem 2.5rem; min-height: auto; }
       .hero-content { max-width: 100%; }
-      .hero-title { font-size: 2.5rem !important; line-height: 1.1; margin-bottom: 0.85rem; }
+      .hero-title { font-size: 2.5rem !important; line-height: 1.1; margin-bottom: 0.85rem; text-align: left; }
+      .hero-badge { margin-left: 0; }
+      .hero-sub { text-align: left; margin-left: 0; margin-right: 0; }
+      .hero-actions { justify-content: flex-start; }
+      .garantia-hero-box { text-align: left; }
       .hero-sub { font-size: 0.92rem; margin-bottom: 1.25rem; }
       .hero-actions { gap: 0.75rem; margin-bottom: 1.25rem; }
       .btn-primary { padding: 0.85rem 1.75rem; font-size: 0.95rem; }
@@ -1654,7 +1658,6 @@
 
       <script>
       var ytPlayer, vslTimer, pendingPlay=false;
-      var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       var wrap    = document.getElementById('vslWrap');
       var overlay = document.getElementById('vslOverlay');
       var fill    = document.getElementById('vslFill');
@@ -1697,23 +1700,14 @@
       };
 
       document.getElementById('vslPlayBig').onclick=function(){
-        if(isMobile){
-          /* iOS: crear iframe con autoplay=1 en el gesto directo del usuario */
-          var c=document.getElementById('ytContainer');
-          c.innerHTML='<iframe style="position:absolute;inset:0;width:100%;height:100%;border:none;" src="https://www.youtube.com/embed/s5-48IWFAhg?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
-          overlay.classList.add('hidden');
-          wrap.classList.remove('paused');
+        overlay.classList.add('hidden');
+        wrap.classList.remove('paused');
+        iconPlay.style.display='none';
+        iconPause.style.display='';
+        if(ytPlayer&&typeof ytPlayer.playVideo==='function'){
+          ytPlayer.playVideo();
         } else {
-          /* Desktop: ocultar overlay inmediatamente, no esperar al buffer */
-          overlay.classList.add('hidden');
-          wrap.classList.remove('paused');
-          iconPlay.style.display='none';
-          iconPause.style.display='';
-          if(ytPlayer&&typeof ytPlayer.playVideo==='function'){
-            ytPlayer.playVideo();
-          } else {
-            pendingPlay=true;
-          }
+          pendingPlay=true;
         }
       };
       document.getElementById('vslPlayPause').onclick=function(){
