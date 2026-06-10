@@ -205,7 +205,7 @@
       color: #7aaeff;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.1rem;
       backdrop-filter: blur(10px);
     }
     .hero-badge-dot {
@@ -224,7 +224,7 @@
       font-weight: 700;
       line-height: 1.06;
       letter-spacing: -0.04em;
-      margin-bottom: 1.4rem;
+      margin-bottom: 0.9rem;
     }
     .hero-title .line-accent {
       display: block;
@@ -237,7 +237,7 @@
       font-size: clamp(1rem, 2vw, 1.15rem);
       color: var(--text-dim);
       max-width: 540px;
-      margin: 0 auto 2.2rem;
+      margin: 0 auto 1.4rem;
       line-height: 1.75;
     }
     .hero-actions {
@@ -914,7 +914,6 @@
       .btn-secondary { padding: 0.85rem 1.5rem; font-size: 0.95rem; }
       /* Video: ratio correcto en móvil */
       .vsl-wrap { border-radius: 10px; margin-bottom: 1.25rem; }
-      #ytPlayer { aspect-ratio: 3439/2160 !important; }
       /* Garantia hero más compacta */
       .garantia-hero-box { margin-bottom: 1.25rem; padding: 0.9rem 1rem; }
       /* Logos plataforma ocultos en móvil */
@@ -1578,7 +1577,7 @@
     <div class="orb orb-3"></div>
 
     <div class="hero-content">
-      <div class="hero-logo-wrap" style="margin-bottom:2rem;">
+      <div class="hero-logo-wrap" style="margin-bottom:1.25rem;">
         <img src="assets/logo-white.png" alt="ListingHaus"
              style="height:56px; width:auto;"
              onerror="this.style.display='none'; document.getElementById('heroLogoFallback').style.display='block'">
@@ -1587,11 +1586,16 @@
         </div>
       </div>
 
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Meta Ads · Solo agencias inmobiliarias
+      </div>
+
       <h1 class="hero-title">
         Consigue propietarios<br>
         <span class="line-accent">contactando tu agencia.</span>
       </h1>
-      <p style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:600; color:#4ade80; margin-bottom:1.5rem; letter-spacing:0.01em;">
+      <p style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:600; color:#4ade80; margin-bottom:0.9rem; letter-spacing:0.01em;">
         Garantizado o no pagas.
       </p>
 
@@ -1650,6 +1654,7 @@
 
       <script>
       var ytPlayer, vslTimer;
+      var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       var wrap    = document.getElementById('vslWrap');
       var overlay = document.getElementById('vslOverlay');
       var fill    = document.getElementById('vslFill');
@@ -1675,7 +1680,6 @@
         timeEl.textContent=fmt(cur)+' / '+fmt(dur);
       }
 
-      /* Load YouTube IFrame API */
       (function(){var s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s);})();
 
       window.onYouTubeIframeAPIReady=function(){
@@ -1689,12 +1693,17 @@
         });
       };
 
-      document.getElementById('vslPlayBig').onclick=function(){ytPlayer&&ytPlayer.playVideo();};
-      document.getElementById('vslPlayPause').onclick=function(){
-        if(!ytPlayer)return;
-        ytPlayer.getPlayerState()===YT.PlayerState.PLAYING?ytPlayer.pauseVideo():ytPlayer.playVideo();
+      document.getElementById('vslPlayBig').onclick=function(){
+        if(isMobile){
+          var c=document.getElementById('ytContainer');
+          c.innerHTML='<iframe style="position:absolute;inset:0;width:100%;height:100%;border:none;" src="https://www.youtube.com/embed/s5-48IWFAhg?autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+          overlay.classList.add('hidden');
+          wrap.classList.remove('paused');
+        } else {
+          ytPlayer&&ytPlayer.playVideo();
+        }
       };
-      document.getElementById('ytPlayer').onclick=function(){
+      document.getElementById('vslPlayPause').onclick=function(){
         if(!ytPlayer)return;
         ytPlayer.getPlayerState()===YT.PlayerState.PLAYING?ytPlayer.pauseVideo():ytPlayer.playVideo();
       };
@@ -1719,22 +1728,9 @@
         fsBtn.innerHTML=inFs
           ?'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6.5 3V6.5H3M15 6.5H11.5V3M11.5 15V11.5H15M3 11.5H6.5V15" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
           :'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5V3H6.5M11.5 3H15V6.5M15 11.5V15H11.5M6.5 15H3V11.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        /* Force iframe resize after fullscreen transition */
-        setTimeout(function(){
-          var ytDiv=document.getElementById('ytPlayer');
-          var iframe=ytDiv&&ytDiv.querySelector('iframe');
-          if(iframe){
-            if(inFs){
-              iframe.style.width='100%';
-              iframe.style.height='100%';
-            } else {
-              iframe.style.width='';
-              iframe.style.height='';
-            }
-          }
-        },100);
       }
       document.addEventListener('fullscreenchange',updateFsIcon);
+      document.addEventListener('webkitfullscreenchange',updateFsIcon);
       document.addEventListener('webkitfullscreenchange',updateFsIcon);
       </script>
 
