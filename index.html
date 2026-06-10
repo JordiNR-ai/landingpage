@@ -1389,12 +1389,20 @@
       background: #000;
       position: relative;
     }
-    .vsl-video {
-      display: block;
+    /* Contenedor ratio — mantiene tamaño sin importar lo que haga el iframe */
+    #ytContainer {
+      position: relative;
       width: 100%;
-      aspect-ratio: 16/9;
+      aspect-ratio: 3439/2160;
       background: #000;
-      cursor: pointer;
+      overflow: hidden;
+    }
+    #ytPlayer {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+      border: none;
     }
     /* Big play overlay */
     .vsl-overlay {
@@ -1452,21 +1460,16 @@
       box-shadow: none !important;
       max-width: none !important;
     }
-    .vsl-wrap:fullscreen #ytPlayer,
-    .vsl-wrap:-webkit-full-screen #ytPlayer {
+    .vsl-wrap:fullscreen #ytContainer,
+    .vsl-wrap:-webkit-full-screen #ytContainer {
       flex: 1;
       min-height: 0;
       aspect-ratio: unset !important;
       width: 100% !important;
-    }
-    .vsl-wrap:fullscreen #ytPlayer iframe,
-    .vsl-wrap:-webkit-full-screen #ytPlayer iframe {
-      width: 100% !important;
-      height: 100% !important;
+      height: calc(100vh - 56px) !important;
     }
     .vsl-wrap:fullscreen .vsl-overlay,
     .vsl-wrap:-webkit-full-screen .vsl-overlay {
-      bottom: 56px;
       border-radius: 0;
     }
     /* Progress */
@@ -1597,21 +1600,29 @@
       </p>
 
       <div class="vsl-wrap paused" id="vslWrap">
-        <!-- YouTube player target -->
-        <div id="ytPlayer" style="width:100%;aspect-ratio:3439/2160;background:#000;display:block;"></div>
+        <!-- Contenedor con ratio fijo — el iframe va dentro absoluto -->
+        <div id="ytContainer">
+          <iframe
+            id="ytPlayer"
+            src="https://www.youtube.com/embed/s5-48IWFAhg?enablejsapi=1&controls=0&rel=0&modestbranding=1&playsinline=1&fs=0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen
+            frameborder="0"
+            title="VSL ListingHaus"
+          ></iframe>
 
-
-        <!-- Poster overlay -->
-        <div class="vsl-overlay" id="vslOverlay" style="background:url('vsl-poster.jpg') center/cover no-repeat;">
-          <div style="position:absolute;inset:0;background:rgba(7,7,15,0.45);border-radius:16px;"></div>
-          <button class="vsl-play-big" id="vslPlayBig" style="position:relative;z-index:1;" aria-label="Reproducir">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <path d="M8 5.5L22.5 14L8 22.5V5.5Z" fill="white"/>
-            </svg>
-          </button>
+          <!-- Poster overlay -->
+          <div class="vsl-overlay" id="vslOverlay" style="background:url('vsl-poster.jpg') center/cover no-repeat;">
+            <div style="position:absolute;inset:0;background:rgba(7,7,15,0.45);border-radius:16px;"></div>
+            <button class="vsl-play-big" id="vslPlayBig" style="position:relative;z-index:1;" aria-label="Reproducir">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M8 5.5L22.5 14L8 22.5V5.5Z" fill="white"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <!-- Controls -->
+        <!-- Controls fuera del ratio-container -->
         <div class="vsl-controls" id="vslControls">
           <div class="vsl-progress" id="vslProgress">
             <div class="vsl-progress-fill" id="vslFill"></div>
@@ -1668,16 +1679,8 @@
       (function(){var s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s);})();
 
       window.onYouTubeIframeAPIReady=function(){
-        ytPlayer=new YT.Player('ytPlayer',{
-          videoId:'s5-48IWFAhg',
-          playerVars:{controls:0,rel:0,modestbranding:1,playsinline:1,fs:0},
+        ytPlayer=new YT.Player(document.getElementById('ytPlayer'),{
           events:{
-            onReady:function(e){
-              var iframe=e.target.getIframe();
-              iframe.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
-              iframe.style.width='100%';
-              iframe.style.height='100%';
-            },
             onStateChange:function(e){
               if(e.data===YT.PlayerState.PLAYING){setPlaying(true);vslTimer=setInterval(tick,250);}
               if(e.data===YT.PlayerState.PAUSED||e.data===YT.PlayerState.ENDED){setPlaying(false);clearInterval(vslTimer);}
