@@ -910,9 +910,9 @@
       .hero-title { font-size: 2.8rem !important; line-height: 1.1; margin-bottom: 0.85rem; }
       .hero-sub { font-size: 0.92rem; margin-bottom: 1.25rem; }
       .hero-actions { gap: 0.75rem; margin-bottom: 1.25rem; }
-      /* En móvil: solo progreso y tiempo, sin botones */
-      #vslPlayPause, .vsl-vol-wrap, #vslFs { display: none !important; }
-      .vsl-wrap:not(.paused) .vsl-controls { opacity: 1 !important; }
+      /* En móvil: ocultar barra, mostrar solo tiempo en esquina */
+      .vsl-controls { display: none !important; }
+      #mobileTime { display: block; position: absolute; bottom: 8px; right: 10px; font-size: 0.75rem; color: rgba(255,255,255,0.75); font-family: 'Space Grotesk',sans-serif; pointer-events: none; z-index: 10; }
       .btn-primary { padding: 0.85rem 1.75rem; font-size: 0.95rem; }
       .btn-secondary { padding: 0.85rem 1.5rem; font-size: 0.95rem; }
       /* Video: ratio correcto en móvil */
@@ -1545,6 +1545,7 @@
       flex-shrink: 0;
     }
     .vsl-btn:hover { color: white; }
+    #mobileTime { display: none; }
     .vsl-time {
       font-size: 0.75rem;
       color: rgba(255,255,255,0.6);
@@ -1629,6 +1630,7 @@
       <div class="vsl-wrap paused" id="vslWrap">
         <!-- Contenedor con ratio fijo — el iframe va dentro absoluto -->
         <div id="ytContainer">
+          <div id="mobileTime"></div>
           <iframe
             id="ytPlayer"
             src="https://www.youtube.com/embed/s5-48IWFAhg?enablejsapi=1&controls=0&rel=0&modestbranding=1&playsinline=1&fs=0"
@@ -1710,7 +1712,8 @@
         if(!ytPlayer||typeof ytPlayer.getCurrentTime!=='function')return;
         var cur=ytPlayer.getCurrentTime()||0, dur=ytPlayer.getDuration()||0;
         fill.style.width=(dur?(cur/dur*100):0)+'%';
-        timeEl.textContent=isMobile?(dur?'-'+fmt(dur-cur):''):fmt(cur)+' / '+fmt(dur);
+        timeEl.textContent=fmt(cur)+' / '+fmt(dur);
+        if(isMobile){var mt=document.getElementById('mobileTime');if(mt&&dur)mt.textContent='-'+fmt(dur-cur);}
       }
 
       (function(){var s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s);})();
