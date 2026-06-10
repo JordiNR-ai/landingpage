@@ -907,13 +907,11 @@
       /* Hero más compacto y aireado */
       .hero { padding: 5.5rem 1.25rem 2.5rem; min-height: auto; }
       .hero-content { max-width: 100%; }
-      .hero-title { font-size: 2.5rem !important; line-height: 1.1; margin-bottom: 0.85rem; text-align: left; }
-      .hero-badge { margin-left: 0; }
-      .hero-sub { text-align: left; margin-left: 0; margin-right: 0; }
-      .hero-actions { justify-content: flex-start; }
-      .garantia-hero-box { text-align: left; }
+      .hero-title { font-size: 2.8rem !important; line-height: 1.1; margin-bottom: 0.85rem; }
       .hero-sub { font-size: 0.92rem; margin-bottom: 1.25rem; }
       .hero-actions { gap: 0.75rem; margin-bottom: 1.25rem; }
+      /* Controles visibles en móvil cuando está reproduciendo */
+      .vsl-wrap:not(.paused) .vsl-controls { opacity: 1 !important; }
       .btn-primary { padding: 0.85rem 1.75rem; font-size: 0.95rem; }
       .btn-secondary { padding: 0.85rem 1.5rem; font-size: 0.95rem; }
       /* Video: ratio correcto en móvil */
@@ -1452,7 +1450,27 @@
     :fullscreen .vsl-controls,
     :-webkit-full-screen .vsl-controls { opacity: 1; }
 
-    /* Fullscreen fixes */
+    /* Fullscreen fixes — CSS fallback para iOS que no soporta requestFullscreen en divs */
+    .vsl-wrap.css-fullscreen {
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 9999 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      display: flex !important;
+      flex-direction: column;
+    }
+    .vsl-wrap.css-fullscreen #ytContainer {
+      flex: 1;
+      min-height: 0;
+      aspect-ratio: unset !important;
+      width: 100% !important;
+      height: calc(100vh - 56px) !important;
+    }
+    .vsl-wrap.css-fullscreen .vsl-controls { opacity: 1 !important; }
     .vsl-wrap:fullscreen,
     .vsl-wrap:-webkit-full-screen {
       display: flex !important;
@@ -1689,10 +1707,14 @@
         ytPlayer=new YT.Player(document.getElementById('ytPlayer'),{
           events:{
             onReady:function(e){
-              if(pendingPlay){pendingPlay=false;e.target.playVideo();}
+              /* Primer para iOS: play muted + stop en 100ms activa el contexto de audio */
+              e.target.mute();
+              e.target.playVideo();
+              setTimeout(function(){e.target.stopVideo();e.target.unMute();},100);
+              if(pendingPlay){pendingPlay=false;setTimeout(function(){e.target.unMute();e.target.playVideo();},150);}
             },
             onStateChange:function(e){
-              if(e.data===YT.PlayerState.PLAYING){setPlaying(true);vslTimer=setInterval(tick,250);}
+              if(e.data===YT.PlayerState.PLAYING){setPlaying(true);vslTimer=setInterval(tick,500);}
               if(e.data===YT.PlayerState.PAUSED||e.data===YT.PlayerState.ENDED){setPlaying(false);clearInterval(vslTimer);}
             }
           }
@@ -1726,12 +1748,28 @@
       };
       document.getElementById('vslVol').oninput=function(){ytPlayer&&ytPlayer.setVolume(this.value);};
       fsBtn.onclick=function(){
-        var inFs=document.fullscreenElement||document.webkitFullscreenElement;
-        if(inFs){document.exitFullscreen?document.exitFullscreen():document.webkitExitFullscreen&&document.webkitExitFullscreen();}
-        else{wrap.requestFullscreen?wrap.requestFullscreen():wrap.webkitRequestFullscreen&&wrap.webkitRequestFullscreen();}
+        var inNativeFs=document.fullscreenElement||document.webkitFullscreenElement;
+        var inCssFs=wrap.classList.contains('css-fullscreen');
+        if(inNativeFs){
+          document.exitFullscreen?document.exitFullscreen():document.webkitExitFullscreen&&document.webkitExitFullscreen();
+        } else if(inCssFs){
+          wrap.classList.remove('css-fullscreen');
+          document.body.style.overflow='';
+          updateFsIcon();
+        } else {
+          var p=wrap.requestFullscreen||wrap.webkitRequestFullscreen;
+          if(p){
+            (wrap.requestFullscreen||wrap.webkitRequestFullscreen).call(wrap);
+          } else {
+            /* Fallback CSS para iOS */
+            wrap.classList.add('css-fullscreen');
+            document.body.style.overflow='hidden';
+            updateFsIcon();
+          }
+        }
       };
       function updateFsIcon(){
-        var inFs=document.fullscreenElement||document.webkitFullscreenElement;
+        var inFs=document.fullscreenElement||document.webkitFullscreenElement||wrap.classList.contains('css-fullscreen');
         fsBtn.innerHTML=inFs
           ?'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6.5 3V6.5H3M15 6.5H11.5V3M11.5 15V11.5H15M3 11.5H6.5V15" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
           :'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5V3H6.5M11.5 3H15V6.5M15 11.5V15H11.5M6.5 15H3V11.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
