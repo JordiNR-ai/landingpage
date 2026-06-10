@@ -1690,6 +1690,7 @@
       var fsBtn   = document.getElementById('vslFs');
 
       function showControlsBriefly(){
+        if(!isMobile)return;
         wrap.classList.add('ctrl-show');
         clearTimeout(ctrlHideTimer);
         ctrlHideTimer=setTimeout(function(){wrap.classList.remove('ctrl-show');},3000);
@@ -1704,10 +1705,11 @@
         if(p)showControlsBriefly();
       }
 
-      /* Toque en el vídeo mientras reproduce → muestra controles en móvil */
-      wrap.addEventListener('touchstart',function(){
+      /* Toque directo en el vídeo mientras reproduce → muestra controles en móvil */
+      document.getElementById('ytContainer').addEventListener('touchend',function(e){
+        e.preventDefault();
         if(!wrap.classList.contains('paused'))showControlsBriefly();
-      },{passive:true});
+      });
       function tick(){
         if(!ytPlayer||typeof ytPlayer.getCurrentTime!=='function')return;
         var cur=ytPlayer.getCurrentTime()||0, dur=ytPlayer.getDuration()||0;
