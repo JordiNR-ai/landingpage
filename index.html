@@ -889,6 +889,35 @@
       .orb { animation: none; }
     }
 
+    /* ─── MARQUEE STRIP (mobile) ─── */
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 18s linear infinite;
+    }
+    .marquee-track .strip-item { flex-shrink: 0; padding: 0 1.5rem; }
+    .marquee-track .strip-div  { flex-shrink: 0; }
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @media (max-width: 700px) {
+      /* Oculta logo del hero en móvil */
+      .hero-logo-wrap { display: none; }
+      /* Ajuste hero */
+      .hero { padding: 5rem 1.25rem 3rem; min-height: auto; }
+      .hero-content { max-width: 100%; }
+      /* Ajuste video */
+      .vsl-wrap { border-radius: 10px; }
+      /* Strip marquee en móvil */
+      .strip { padding: 0; overflow: hidden; }
+      .strip-inner { display: none; }
+      .strip-marquee { display: block !important; }
+      /* Garantia hero móvil */
+      .garantia-hero-box { margin-bottom: 1.5rem; }
+    }
+    .strip-marquee { display: none; overflow: hidden; padding: 1.5rem 0; }
+
     /* ─── GARANTÍA HERO ─── */
     .garantia-hero-box {
       width: 100%;
@@ -1403,6 +1432,35 @@
     .vsl-wrap.paused .vsl-controls { opacity: 1; }
     :fullscreen .vsl-controls,
     :-webkit-full-screen .vsl-controls { opacity: 1; }
+
+    /* Fullscreen fixes */
+    .vsl-wrap:fullscreen,
+    .vsl-wrap:-webkit-full-screen {
+      display: flex !important;
+      flex-direction: column;
+      width: 100vw !important;
+      height: 100vh !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      max-width: none !important;
+    }
+    .vsl-wrap:fullscreen #ytPlayer,
+    .vsl-wrap:-webkit-full-screen #ytPlayer {
+      flex: 1;
+      min-height: 0;
+      aspect-ratio: unset !important;
+      width: 100% !important;
+    }
+    .vsl-wrap:fullscreen #ytPlayer iframe,
+    .vsl-wrap:-webkit-full-screen #ytPlayer iframe {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    .vsl-wrap:fullscreen .vsl-overlay,
+    .vsl-wrap:-webkit-full-screen .vsl-overlay {
+      bottom: 56px;
+      border-radius: 0;
+    }
     /* Progress */
     .vsl-progress {
       width: 100%;
@@ -1509,7 +1567,7 @@
     <div class="orb orb-3"></div>
 
     <div class="hero-content">
-      <div style="margin-bottom:2rem;">
+      <div class="hero-logo-wrap" style="margin-bottom:2rem;">
         <img src="assets/logo-white.png" alt="ListingHaus"
              style="height:56px; width:auto;"
              onerror="this.style.display='none'; document.getElementById('heroLogoFallback').style.display='block'">
@@ -1531,11 +1589,14 @@
       </p>
 
       <div class="vsl-wrap paused" id="vslWrap">
-        <video class="vsl-video" id="vslVideo" src="vsl.mp4" poster="vsl-poster.jpg" preload="metadata" playsinline></video>
+        <!-- YouTube player target -->
+        <div id="ytPlayer" style="width:100%;aspect-ratio:3439/2160;background:#000;display:block;"></div>
 
-        <!-- Play overlay -->
-        <div class="vsl-overlay" id="vslOverlay">
-          <button class="vsl-play-big" id="vslPlayBig" aria-label="Reproducir">
+
+        <!-- Poster overlay -->
+        <div class="vsl-overlay" id="vslOverlay" style="background:url('vsl-poster.jpg') center/cover no-repeat;">
+          <div style="position:absolute;inset:0;background:rgba(7,7,15,0.45);border-radius:16px;"></div>
+          <button class="vsl-play-big" id="vslPlayBig" style="position:relative;z-index:1;" aria-label="Reproducir">
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
               <path d="M8 5.5L22.5 14L8 22.5V5.5Z" fill="white"/>
             </svg>
@@ -1559,7 +1620,7 @@
                 <svg id="iconVol" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5H6L10 3V15L6 11.5H3V6.5Z" fill="white"/><path d="M13 6C13.8 7 14.3 8 14.3 9C14.3 10 13.8 11 13 12" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
                 <svg id="iconMuted" width="18" height="18" viewBox="0 0 18 18" fill="none" style="display:none"><path d="M3 6.5H6L10 3V15L6 11.5H3V6.5Z" fill="white"/><line x1="13" y1="6" x2="16" y2="12" stroke="white" stroke-width="1.3" stroke-linecap="round"/><line x1="16" y1="6" x2="13" y2="12" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
               </button>
-              <input type="range" class="vsl-vol-slider" id="vslVol" min="0" max="1" step="0.05" value="1">
+              <input type="range" class="vsl-vol-slider" id="vslVol" min="0" max="100" step="1" value="100">
             </div>
             <button class="vsl-btn" id="vslFs" aria-label="Pantalla completa">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5V3H6.5M11.5 3H15V6.5M15 11.5V15H11.5M6.5 15H3V11.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1569,73 +1630,95 @@
       </div>
 
       <script>
-      (function(){
-        var wrap = document.getElementById('vslWrap');
-        var vid  = document.getElementById('vslVideo');
-        var overlay = document.getElementById('vslOverlay');
-        var fill = document.getElementById('vslFill');
-        var timeEl = document.getElementById('vslTime');
-        var progress = document.getElementById('vslProgress');
-        var iconPlay = document.getElementById('iconPlay');
-        var iconPause = document.getElementById('iconPause');
-        var iconVol = document.getElementById('iconVol');
-        var iconMuted = document.getElementById('iconMuted');
+      var ytPlayer, vslTimer;
+      var wrap    = document.getElementById('vslWrap');
+      var overlay = document.getElementById('vslOverlay');
+      var fill    = document.getElementById('vslFill');
+      var timeEl  = document.getElementById('vslTime');
+      var progress= document.getElementById('vslProgress');
+      var iconPlay= document.getElementById('iconPlay');
+      var iconPause=document.getElementById('iconPause');
+      var iconVol = document.getElementById('iconVol');
+      var iconMuted=document.getElementById('iconMuted');
+      var fsBtn   = document.getElementById('vslFs');
 
-        function fmt(s) {
-          var m = Math.floor(s/60), sec = Math.floor(s%60);
-          return m+':'+(sec<10?'0':'')+sec;
-        }
-        function setPlaying(p) {
-          overlay.classList.toggle('hidden', p);
-          wrap.classList.toggle('paused', !p);
-          iconPlay.style.display  = p ? 'none' : '';
-          iconPause.style.display = p ? '' : 'none';
-        }
+      function fmt(s){var m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
+      function setPlaying(p){
+        overlay.classList.toggle('hidden',p);
+        wrap.classList.toggle('paused',!p);
+        iconPlay.style.display=p?'none':'';
+        iconPause.style.display=p?'':'none';
+      }
+      function tick(){
+        if(!ytPlayer||typeof ytPlayer.getCurrentTime!=='function')return;
+        var cur=ytPlayer.getCurrentTime()||0, dur=ytPlayer.getDuration()||0;
+        fill.style.width=(dur?(cur/dur*100):0)+'%';
+        timeEl.textContent=fmt(cur)+' / '+fmt(dur);
+      }
 
-        document.getElementById('vslPlayBig').onclick = function(){ vid.play(); };
-        document.getElementById('vslPlayPause').onclick = function(){ vid.paused ? vid.play() : vid.pause(); };
-        vid.addEventListener('play',  function(){ setPlaying(true); });
-        vid.addEventListener('pause', function(){ setPlaying(false); });
-        vid.addEventListener('ended', function(){ setPlaying(false); });
-        vid.addEventListener('click', function(){ vid.paused ? vid.play() : vid.pause(); });
+      /* Load YouTube IFrame API */
+      (function(){var s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s);})();
 
-        vid.addEventListener('timeupdate', function(){
-          var pct = vid.duration ? (vid.currentTime/vid.duration*100) : 0;
-          fill.style.width = pct+'%';
-          timeEl.textContent = fmt(vid.currentTime)+' / '+fmt(vid.duration||0);
-        });
-
-        progress.addEventListener('click', function(e){
-          var r = progress.getBoundingClientRect();
-          vid.currentTime = ((e.clientX-r.left)/r.width) * vid.duration;
-        });
-
-        document.getElementById('vslMute').onclick = function(){
-          vid.muted = !vid.muted;
-          iconVol.style.display   = vid.muted ? 'none' : '';
-          iconMuted.style.display = vid.muted ? '' : 'none';
-        };
-        document.getElementById('vslVol').oninput = function(){ vid.volume = this.value; };
-        var fsBtn = document.getElementById('vslFs');
-        fsBtn.onclick = function(){
-          var inFs = document.fullscreenElement || document.webkitFullscreenElement;
-          if(inFs) {
-            if(document.exitFullscreen) document.exitFullscreen();
-            else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
-          } else {
-            if(wrap.requestFullscreen) wrap.requestFullscreen();
-            else if(wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+      window.onYouTubeIframeAPIReady=function(){
+        ytPlayer=new YT.Player('ytPlayer',{
+          videoId:'s5-48IWFAhg',
+          playerVars:{controls:0,rel:0,modestbranding:1,playsinline:1,fs:0},
+          events:{
+            onStateChange:function(e){
+              if(e.data===YT.PlayerState.PLAYING){setPlaying(true);vslTimer=setInterval(tick,250);}
+              if(e.data===YT.PlayerState.PAUSED||e.data===YT.PlayerState.ENDED){setPlaying(false);clearInterval(vslTimer);}
+            }
           }
-        };
-        document.addEventListener('fullscreenchange', updateFsIcon);
-        document.addEventListener('webkitfullscreenchange', updateFsIcon);
-        function updateFsIcon(){
-          var inFs = document.fullscreenElement || document.webkitFullscreenElement;
-          fsBtn.innerHTML = inFs
-            ? '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6.5 3V6.5H3M15 6.5H11.5V3M11.5 15V11.5H15M3 11.5H6.5V15" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-            : '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5V3H6.5M11.5 3H15V6.5M15 11.5V15H11.5M6.5 15H3V11.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        }
-      })();
+        });
+      };
+
+      document.getElementById('vslPlayBig').onclick=function(){ytPlayer&&ytPlayer.playVideo();};
+      document.getElementById('vslPlayPause').onclick=function(){
+        if(!ytPlayer)return;
+        ytPlayer.getPlayerState()===YT.PlayerState.PLAYING?ytPlayer.pauseVideo():ytPlayer.playVideo();
+      };
+      document.getElementById('ytPlayer').onclick=function(){
+        if(!ytPlayer)return;
+        ytPlayer.getPlayerState()===YT.PlayerState.PLAYING?ytPlayer.pauseVideo():ytPlayer.playVideo();
+      };
+      progress.addEventListener('click',function(e){
+        if(!ytPlayer)return;
+        var r=progress.getBoundingClientRect();
+        ytPlayer.seekTo(((e.clientX-r.left)/r.width)*ytPlayer.getDuration(),true);
+      });
+      document.getElementById('vslMute').onclick=function(){
+        if(!ytPlayer)return;
+        if(ytPlayer.isMuted()){ytPlayer.unMute();iconVol.style.display='';iconMuted.style.display='none';}
+        else{ytPlayer.mute();iconVol.style.display='none';iconMuted.style.display='';}
+      };
+      document.getElementById('vslVol').oninput=function(){ytPlayer&&ytPlayer.setVolume(this.value);};
+      fsBtn.onclick=function(){
+        var inFs=document.fullscreenElement||document.webkitFullscreenElement;
+        if(inFs){document.exitFullscreen?document.exitFullscreen():document.webkitExitFullscreen&&document.webkitExitFullscreen();}
+        else{wrap.requestFullscreen?wrap.requestFullscreen():wrap.webkitRequestFullscreen&&wrap.webkitRequestFullscreen();}
+      };
+      function updateFsIcon(){
+        var inFs=document.fullscreenElement||document.webkitFullscreenElement;
+        fsBtn.innerHTML=inFs
+          ?'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6.5 3V6.5H3M15 6.5H11.5V3M11.5 15V11.5H15M3 11.5H6.5V15" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          :'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5V3H6.5M11.5 3H15V6.5M15 11.5V15H11.5M6.5 15H3V11.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        /* Force iframe resize after fullscreen transition */
+        setTimeout(function(){
+          var ytDiv=document.getElementById('ytPlayer');
+          var iframe=ytDiv&&ytDiv.querySelector('iframe');
+          if(iframe){
+            if(inFs){
+              iframe.style.width='100%';
+              iframe.style.height='100%';
+            } else {
+              iframe.style.width='';
+              iframe.style.height='';
+            }
+          }
+        },100);
+      }
+      document.addEventListener('fullscreenchange',updateFsIcon);
+      document.addEventListener('webkitfullscreenchange',updateFsIcon);
       </script>
 
       <div class="hero-actions">
@@ -1686,6 +1769,7 @@
 
   <!-- ── BENEFITS STRIP ── -->
   <div class="strip reveal">
+    <!-- Desktop: static -->
     <div class="strip-inner">
       <div class="strip-item"><div class="strip-icon">🏢</div> Solo agencias inmobiliarias</div>
       <div class="strip-div"></div>
@@ -1694,6 +1778,27 @@
       <div class="strip-item"><div class="strip-icon">📊</div> Visibilidad total de resultados</div>
       <div class="strip-div"></div>
       <div class="strip-item"><div class="strip-icon">🔓</div> Sin permanencia forzada</div>
+    </div>
+    <!-- Mobile: marquee -->
+    <div class="strip-marquee">
+      <div class="marquee-track">
+        <div class="strip-item"><div class="strip-icon">🏢</div> Solo agencias inmobiliarias</div>
+        <div class="strip-div"></div>
+        <div class="strip-item"><div class="strip-icon">📍</div> Campañas por zona y perfil</div>
+        <div class="strip-div"></div>
+        <div class="strip-item"><div class="strip-icon">📊</div> Visibilidad total de resultados</div>
+        <div class="strip-div"></div>
+        <div class="strip-item"><div class="strip-icon">🔓</div> Sin permanencia forzada</div>
+        <div class="strip-div"></div>
+        <!-- Duplicado para loop continuo -->
+        <div class="strip-item"><div class="strip-icon">🏢</div> Solo agencias inmobiliarias</div>
+        <div class="strip-div"></div>
+        <div class="strip-item"><div class="strip-icon">📍</div> Campañas por zona y perfil</div>
+        <div class="strip-div"></div>
+        <div class="strip-item"><div class="strip-icon">📊</div> Visibilidad total de resultados</div>
+        <div class="strip-div"></div>
+        <div class="strip-item"><div class="strip-icon">🔓</div> Sin permanencia forzada</div>
+      </div>
     </div>
   </div>
 
