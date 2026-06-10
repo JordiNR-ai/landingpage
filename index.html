@@ -902,19 +902,27 @@
       100% { transform: translateX(-50%); }
     }
     @media (max-width: 700px) {
-      /* Oculta logo del hero en móvil */
+      /* Logo hero oculto en móvil */
       .hero-logo-wrap { display: none; }
-      /* Ajuste hero */
-      .hero { padding: 5rem 1.25rem 3rem; min-height: auto; }
+      /* Hero más compacto y aireado */
+      .hero { padding: 5.5rem 1.25rem 2.5rem; min-height: auto; }
       .hero-content { max-width: 100%; }
-      /* Ajuste video */
-      .vsl-wrap { border-radius: 10px; }
-      /* Strip marquee en móvil */
+      .hero-title { font-size: 2rem !important; line-height: 1.1; margin-bottom: 0.85rem; }
+      .hero-sub { font-size: 0.92rem; margin-bottom: 1.25rem; }
+      .hero-actions { gap: 0.75rem; margin-bottom: 1.25rem; }
+      .btn-primary { padding: 0.85rem 1.75rem; font-size: 0.95rem; }
+      .btn-secondary { padding: 0.85rem 1.5rem; font-size: 0.95rem; }
+      /* Video: ratio correcto en móvil */
+      .vsl-wrap { border-radius: 10px; margin-bottom: 1.25rem; }
+      #ytPlayer { aspect-ratio: 3439/2160 !important; }
+      /* Garantia hero más compacta */
+      .garantia-hero-box { margin-bottom: 1.25rem; padding: 0.9rem 1rem; }
+      /* Logos plataforma ocultos en móvil */
+      .hero-logos-row { display: none; }
+      /* Strip marquee */
       .strip { padding: 0; overflow: hidden; }
       .strip-inner { display: none; }
       .strip-marquee { display: block !important; }
-      /* Garantia hero móvil */
-      .garantia-hero-box { margin-bottom: 1.5rem; }
     }
     .strip-marquee { display: none; overflow: hidden; padding: 1.5rem 0; }
 
@@ -1664,6 +1672,12 @@
           videoId:'s5-48IWFAhg',
           playerVars:{controls:0,rel:0,modestbranding:1,playsinline:1,fs:0},
           events:{
+            onReady:function(e){
+              var iframe=e.target.getIframe();
+              iframe.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
+              iframe.style.width='100%';
+              iframe.style.height='100%';
+            },
             onStateChange:function(e){
               if(e.data===YT.PlayerState.PLAYING){setPlaying(true);vslTimer=setInterval(tick,250);}
               if(e.data===YT.PlayerState.PAUSED||e.data===YT.PlayerState.ENDED){setPlaying(false);clearInterval(vslTimer);}
