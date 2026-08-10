@@ -65,6 +65,7 @@
       /* ---------- Buttons ---------- */
       .btn-contact {
         border-radius: 9999px;
+        white-space: nowrap;
         padding: 12px 32px;
         font-size: 12px;
         font-weight: 500;
@@ -191,12 +192,21 @@
       .hero__bottom {
         margin-top: auto;
         display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
         padding: 0 24px 28px;
+      }
+      /* on mobile the CTA sits on the right so it clears the WhatsApp button */
+      .hero__bottom > div {
+        align-self: flex-end;
       }
       @media (min-width: 640px) {
         .hero__bottom {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 0;
           padding-bottom: 32px;
         }
       }
@@ -253,6 +263,70 @@
       }
       .magnet {
         will-change: transform;
+      }
+
+      /* ---------- Hero animated background (struck-through taboos) ---------- */
+      .hero__bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 96px 0;
+        pointer-events: none;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+        mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+      }
+      /* keep the actual content above the moving background */
+      .hero__nav,
+      .hero__heading-wrap,
+      .hero__bottom {
+        position: relative;
+        z-index: 1;
+      }
+      .hero__bg-row {
+        display: flex;
+        width: 100%;
+      }
+      .hero__bg-track {
+        display: flex;
+        flex-shrink: 0;
+        gap: clamp(2rem, 4vw, 4rem);
+        width: max-content;
+        padding-right: clamp(2rem, 4vw, 4rem);
+        will-change: transform;
+      }
+      .hero__bg-row--rtl .hero__bg-track {
+        animation: hero-taboo-rtl 60s linear infinite;
+      }
+      .hero__bg-row--ltr .hero__bg-track {
+        animation: hero-taboo-ltr 60s linear infinite;
+      }
+      @keyframes hero-taboo-rtl {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+      @keyframes hero-taboo-ltr {
+        from { transform: translateX(-50%); }
+        to { transform: translateX(0); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hero__bg-track { animation: none !important; }
+      }
+      .hero__taboo {
+        flex-shrink: 0;
+        white-space: nowrap;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        line-height: 1;
+        font-size: clamp(1.5rem, 3.4vw, 3rem);
+        color: rgba(255, 255, 255, 0.07);
+        text-decoration: line-through;
+        text-decoration-color: rgba(255, 214, 10, 0.55);
+        text-decoration-thickness: clamp(3px, 0.35vw, 6px);
       }
 
       /* ---------- Marquee ---------- */
@@ -314,16 +388,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 64px 20px;
+        padding: 80px 20px;
       }
       @media (min-width: 640px) {
         .about {
-          padding: 80px 32px;
+          padding-left: 32px;
+          padding-right: 32px;
         }
       }
       @media (min-width: 768px) {
         .about {
-          padding: 96px 40px;
+          padding-left: 40px;
+          padding-right: 40px;
         }
       }
       .about__deco {
@@ -390,32 +466,32 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 36px;
+        gap: 64px;
       }
       @media (min-width: 640px) {
         .about__content {
-          gap: 44px;
+          gap: 80px;
         }
       }
       @media (min-width: 768px) {
         .about__content {
-          gap: 52px;
+          gap: 96px;
         }
       }
       .about__heading-block {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 22px;
+        gap: 40px;
       }
       @media (min-width: 640px) {
         .about__heading-block {
-          gap: 28px;
+          gap: 56px;
         }
       }
       @media (min-width: 768px) {
         .about__heading-block {
-          gap: 36px;
+          gap: 64px;
         }
       }
       .about__title {
@@ -1046,6 +1122,14 @@
         color: #ffffff;
         font-size: clamp(1rem, 2vw, 1.35rem);
       }
+      .testimonials__cta {
+        margin-top: 48px;
+        padding: 0 20px;
+        text-align: center;
+      }
+      @media (min-width: 768px) {
+        .testimonials__cta { margin-top: 64px; }
+      }
 
       /* ---------- Multichannel (Multicanalidad) ---------- */
       .multichannel {
@@ -1615,16 +1699,6 @@
         </div>
       </div>
 
-      <div class="hero__portrait-wrap">
-        <div class="fade-in" style="--fy: 30px; --fdelay: 0.6s">
-          <div class="magnet" data-magnet data-padding="150" data-strength="3">
-            <img
-              src="https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png"
-              alt="Jack, 3D creator"
-            />
-          </div>
-        </div>
-      </div>
     </section>
 
 
@@ -1756,10 +1830,6 @@
               <span class="char" data-i="227">i</span><span class="char" data-i="228">n</span><span class="char" data-i="229">v</span><span class="char" data-i="230">e</span><span class="char" data-i="231">r</span><span class="char" data-i="232">t</span><span class="char" data-i="233">i</span><span class="char" data-i="234">r</span><span class="char" data-i="235">.</span>
             </span>
           </p>
-        </div>
-
-        <div class="fade-in" style="--fy: 20px; --fdelay: 0.2s">
-          <button type="button" class="btn-contact" id="contact">Reclama tu estrategia</button>
         </div>
       </div>
     </section>
@@ -1918,9 +1988,8 @@
             </div>
             <div class="project-card__text">
               <p class="project-card__desc">
-                No necesitas llegar a todo el mundo. Necesitas llegar a las personas correctas. Facebook e
-                Instagram nos permiten definir con precisión a quién mostrar tus anuncios y concentrar el
-                presupuesto donde realmente existe una oportunidad.
+                No se trata de llegar a todos, sino a las personas correctas. Con Facebook e Instagram
+                definimos a quién mostrar tus anuncios y concentramos el presupuesto donde hay oportunidad.
               </p>
             </div>
           </div>
@@ -1940,9 +2009,8 @@
             </div>
             <div class="project-card__text">
               <p class="project-card__desc">
-                No dejamos que los datos se queden en números. Cada campaña nos muestra qué anuncios, públicos y
-                mensajes están generando oportunidades y cuáles no. Analizamos esa información continuamente para
-                tomar mejores decisiones, ajustar la estrategia y hacer que cada campaña sea más eficiente.
+                Cada campaña nos muestra qué anuncios, públicos y mensajes funcionan y cuáles no. Analizamos
+                esos datos para ajustar la estrategia y hacer que cada euro rinda más.
               </p>
             </div>
           </div>
@@ -1962,9 +2030,8 @@
             </div>
             <div class="project-card__text">
               <p class="project-card__desc">
-                Identificamos qué campañas están generando mejores resultados y ponemos más recursos donde
-                realmente existe potencial. Aumentamos la inversión poco a poco y seguimos de cerca las ventas
-                para seguir creciendo sin gastar más de lo necesario.
+                Identificamos qué campañas dan mejores resultados y ponemos más recursos donde hay potencial.
+                Subimos la inversión poco a poco, siguiendo de cerca las ventas.
               </p>
             </div>
           </div>
@@ -2178,6 +2245,9 @@
             <figcaption class="testimonial__sector">Inmobiliaria</figcaption>
           </figure>
         </div>
+      </div>
+      <div class="testimonials__cta">
+        <button type="button" class="btn-contact" id="contact">Reclama tu estrategia</button>
       </div>
     </section>
 
