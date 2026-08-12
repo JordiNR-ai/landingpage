@@ -1,9 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jack -- 3D Creator</title>
+    <title>Tabú | Agencia de Marketing Digital</title>
+    <meta name="description" content="Tabú, agencia de marketing digital experta en Facebook e Instagram Ads. Estrategia, campañas y resultados sin tabúes." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%23ffd60a'/%3E%3Ctext%20x='16'%20y='23'%20font-family='Arial,sans-serif'%20font-size='21'%20font-weight='900'%20text-anchor='middle'%20fill='%230c0c0c'%3ET%3C/text%3E%3C/svg%3E" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tabú | Agencia de Marketing Digital" />
+    <meta property="og:description" content="Expertos en Facebook e Instagram Ads. Estrategia, campañas y resultados sin tabúes." />
+    <meta property="og:image" content="og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -438,9 +445,10 @@
         font-size: clamp(3rem, 12vw, 160px);
       }
       .about__title-reg {
-        font-size: 0.28em;
+        font-size: 0.42em;
         vertical-align: top;
         letter-spacing: normal;
+        margin-left: 0.04em;
       }
       .about__text {
         max-width: 560px;
@@ -543,6 +551,23 @@
       @media (min-width: 640px) {
         .service-item__body {
           gap: 12px;
+        }
+      }
+      .service-item__head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .service-item__icon {
+        flex-shrink: 0;
+        width: 30px;
+        height: 30px;
+        color: #0c0c0c;
+      }
+      @media (min-width: 640px) {
+        .service-item__icon {
+          width: 36px;
+          height: 36px;
         }
       }
       .service-item__name {
@@ -1051,11 +1076,36 @@
         color: #d7e2ea;
         font-size: clamp(1rem, 2vw, 1.35rem);
       }
+      .testimonial__stars {
+        color: #ffd60a;
+        font-size: 1.05rem;
+        letter-spacing: 3px;
+        line-height: 1;
+      }
+      .testimonial__author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .testimonial__avatar {
+        flex-shrink: 0;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(215, 226, 234, 0.12);
+        border: 1px solid rgba(215, 226, 234, 0.2);
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
       .testimonial__sector {
         font-weight: 700;
-        line-height: 1.625;
+        line-height: 1.4;
         color: #ffffff;
-        font-size: clamp(1rem, 2vw, 1.35rem);
+        font-size: clamp(1rem, 2vw, 1.25rem);
       }
       .testimonials__cta {
         margin-top: 48px;
@@ -1617,8 +1667,8 @@
       <nav class="hero__nav fade-in" style="--fy: -20px; --fdelay: 0s">
         <a href="#about">Tabú</a>
         <a href="#price">Proceso</a>
-        <a href="#testimonios">Testimonios</a>
-        <a href="#contact">Contact</a>
+        <a href="#testimonios">Opiniones</a>
+        <a href="#contact">Contacto</a>
       </nav>
 
       <div class="hero__heading-wrap">
@@ -1780,7 +1830,10 @@
         <div class="service-item fade-in" style="--fdelay: 0s">
           <span class="service-item__number">01</span>
           <div class="service-item__body">
-            <h3 class="service-item__name">Nos conocemos</h3>
+            <div class="service-item__head">
+              <span class="service-item__icon"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5 h14 a2 2 0 0 1 2 2 v6 a2 2 0 0 1 -2 2 h-8 l-4 3 v-3 h-2 a2 2 0 0 1 -2 -2 v-6 a2 2 0 0 1 2 -2 z"/><path d="M14 19 h12 a2 2 0 0 1 2 2 v5 a2 2 0 0 1 -2 2 h-3 v3 l-4 -3 h-5 a2 2 0 0 1 -2 -2 v-5 a2 2 0 0 1 2 -2 z"/></svg></span>
+              <h3 class="service-item__name">Nos conocemos</h3>
+            </div>
             <p class="service-item__desc">
               <span class="copy-long">Las mejores estrategias nacen de una buena conversación. Antes de hablar de campañas, queremos entender tu negocio, tus objetivos y qué está frenando tu crecimiento.</span><span class="copy-short">Antes de hablar de campañas, queremos entender tu negocio, tus objetivos y qué frena tu crecimiento.</span>
             </p>
@@ -1789,7 +1842,10 @@
         <div class="service-item fade-in" style="--fdelay: 0.1s">
           <span class="service-item__number">02</span>
           <div class="service-item__body">
-            <h3 class="service-item__name">Investigamos</h3>
+            <div class="service-item__head">
+              <span class="service-item__icon"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="8.5"/><path d="M20.2 20.2 L27.5 27.5"/></svg></span>
+              <h3 class="service-item__name">Investigamos</h3>
+            </div>
             <p class="service-item__desc">
               <span class="copy-long">Analizamos tu mercado, estudiamos a tu competencia e identificamos las oportunidades para crear una estrategia adaptada a tu punto de partida.</span><span class="copy-short">Analizamos tu mercado y tu competencia para detectar las oportunidades de tu negocio.</span>
             </p>
@@ -1798,7 +1854,10 @@
         <div class="service-item fade-in" style="--fdelay: 0.2s">
           <span class="service-item__number">03</span>
           <div class="service-item__body">
-            <h3 class="service-item__name">Diseñamos</h3>
+            <div class="service-item__head">
+              <span class="service-item__icon"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 26.5 L9 19.5 L22 6.5 L26 10.5 L13 23.5 Z"/><path d="M19 9.5 L23 13.5"/><path d="M6 26.5 L10.5 25.2"/></svg></span>
+              <h3 class="service-item__name">Diseñamos</h3>
+            </div>
             <p class="service-item__desc">
               <span class="copy-long">Con toda la información recopilada, construimos una estrategia personalizada para que cada euro invertido tenga un propósito.</span><span class="copy-short">Construimos una estrategia personalizada para que cada euro invertido tenga un propósito.</span>
             </p>
@@ -1807,7 +1866,10 @@
         <div class="service-item fade-in" style="--fdelay: 0.3s">
           <span class="service-item__number">04</span>
           <div class="service-item__body">
-            <h3 class="service-item__name">Estimamos</h3>
+            <div class="service-item__head">
+              <span class="service-item__icon"><svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5 V26 H27"/><path d="M8.5 20 L14 14 L18.5 17.5 L26 8.5"/><path d="M21 8.5 H26 V13.5"/></svg></span>
+              <h3 class="service-item__name">Estimamos</h3>
+            </div>
             <p class="service-item__desc">
               <span class="copy-long">Te mostramos una estimación de resultados para que conozcas el potencial de la estrategia antes de ponerla en marcha.</span><span class="copy-short">Te mostramos una estimación de resultados para que veas el potencial antes de empezar.</span>
             </p>
@@ -2076,101 +2138,101 @@
       <h2 class="hero-heading testimonials__title">Lo dicen ellos</h2>
       <div class="testimonials__viewport">
         <div class="testimonials__track">
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Venía bastante quemado de trabajar con otra agencia. Gastábamos dinero todos los meses y no sabíamos muy bien qué estábamos consiguiendo. Con Tabú cambiamos completamente la forma de hacer las campañas y empezamos a recibir contactos de propietarios de verdad. La diferencia fue enorme.</p>
-            <figcaption class="testimonial__sector">Inmobiliaria</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">MG</span><span class="testimonial__sector">Inmobiliaria</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Antes teníamos campañas funcionando, pero los resultados iban y venían muchísimo. Con Tabú empezamos a tener una entrada de pacientes mucho más constante y, sobre todo, entendimos por fin qué estaba funcionando y dónde tenía sentido meter el presupuesto.</p>
-            <figcaption class="testimonial__sector">Clínica estética</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">LR</span><span class="testimonial__sector">Clínica estética</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Habíamos probado Meta Ads varias veces y siempre acabábamos igual: gastando más de lo que ingresábamos. Con Tabú conseguimos darle la vuelta y hacer que la publicidad empezara a generar ventas de forma bastante más constante.</p>
-            <figcaption class="testimonial__sector">E-commerce de moda</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">AS</span><span class="testimonial__sector">E-commerce de moda</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Nuestro problema era que dependíamos demasiado del boca a boca. Queríamos una forma de conseguir socios nuevos todos los meses y con Tabú empezamos a recibir solicitudes prácticamente desde el principio. Ahora la publicidad es una parte bastante importante de nuestras altas.</p>
-            <figcaption class="testimonial__sector">Gimnasio</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">DP</span><span class="testimonial__sector">Gimnasio</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Hasta ahora casi todos los clientes nos llegaban por recomendación. No teníamos ni idea de cómo funcionaba captar clientes por internet. Empezamos con Tabú y en poco tiempo ya teníamos personas preguntando por presupuestos todas las semanas.</p>
-            <figcaption class="testimonial__sector">Empresa de reformas</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">JM</span><span class="testimonial__sector">Empresa de reformas</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Habíamos hecho publicidad antes, pero sinceramente nunca sabíamos si nos estaba sirviendo para algo. Con Tabú empezamos a ver una relación mucho más clara entre las campañas y las reservas. Y eso nos ha permitido invertir con mucha más tranquilidad.</p>
-            <figcaption class="testimonial__sector">Restaurante</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">CV</span><span class="testimonial__sector">Restaurante</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Tenía claro que el producto funcionaba, pero conseguir alumnos nuevos era otra historia. Con Tabú encontramos una forma de llegar a gente que realmente estaba interesada y las ventas empezaron a crecer bastante.</p>
-            <figcaption class="testimonial__sector">Academia online</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">PL</span><span class="testimonial__sector">Academia online</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Nuestro problema no era conseguir formularios, era conseguir buenos contactos. Antes nos llegaban muchos leads que luego no tenían nada que ver con nuestro cliente. Cambiamos la estrategia con Tabú y la calidad de las oportunidades mejoró muchísimo.</p>
-            <figcaption class="testimonial__sector">Empresa B2B</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">RT</span><span class="testimonial__sector">Empresa B2B</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Habíamos trabajado con un par de agencias y siempre terminábamos con la sensación de que estábamos tirando el dinero. Con Tabú fue diferente porque desde el principio entendieron qué queríamos conseguir y empezamos a notar más reservas que venían directamente de las campañas.</p>
-            <figcaption class="testimonial__sector">Fisioterapia</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">NC</span><span class="testimonial__sector">Fisioterapia</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Dependíamos demasiado de nuestros clientes habituales y nos costaba muchísimo conseguir compradores nuevos. Empezamos a trabajar Meta Ads con Tabú y conseguimos aumentar bastante las ventas online sin tener que estar haciendo promociones todo el rato.</p>
-            <figcaption class="testimonial__sector">E-commerce de alimentación</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">SB</span><span class="testimonial__sector">E-commerce de alimentación</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Llevábamos tiempo intentando hacer funcionar la publicidad y no terminábamos de encontrar la tecla. Con Tabú cambiamos el enfoque y empezamos a recibir muchas más solicitudes. Lo mejor es que ahora sabemos mucho mejor qué está funcionando y qué no.</p>
-            <figcaption class="testimonial__sector">Empresa de formación</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">FD</span><span class="testimonial__sector">Empresa de formación</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Después de una mala experiencia con otra agencia estábamos bastante desconfiados con volver a invertir en publicidad. Tabú nos convenció de probar otra vez y la verdad es que el cambio se notó. Hemos conseguido muchas más oportunidades de captación y hemos recuperado la confianza en el canal.</p>
-            <figcaption class="testimonial__sector">Inmobiliaria</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">MG</span><span class="testimonial__sector">Inmobiliaria</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Venía bastante quemado de trabajar con otra agencia. Gastábamos dinero todos los meses y no sabíamos muy bien qué estábamos consiguiendo. Con Tabú cambiamos completamente la forma de hacer las campañas y empezamos a recibir contactos de propietarios de verdad. La diferencia fue enorme.</p>
-            <figcaption class="testimonial__sector">Inmobiliaria</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">MG</span><span class="testimonial__sector">Inmobiliaria</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Antes teníamos campañas funcionando, pero los resultados iban y venían muchísimo. Con Tabú empezamos a tener una entrada de pacientes mucho más constante y, sobre todo, entendimos por fin qué estaba funcionando y dónde tenía sentido meter el presupuesto.</p>
-            <figcaption class="testimonial__sector">Clínica estética</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">LR</span><span class="testimonial__sector">Clínica estética</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Habíamos probado Meta Ads varias veces y siempre acabábamos igual: gastando más de lo que ingresábamos. Con Tabú conseguimos darle la vuelta y hacer que la publicidad empezara a generar ventas de forma bastante más constante.</p>
-            <figcaption class="testimonial__sector">E-commerce de moda</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">AS</span><span class="testimonial__sector">E-commerce de moda</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Nuestro problema era que dependíamos demasiado del boca a boca. Queríamos una forma de conseguir socios nuevos todos los meses y con Tabú empezamos a recibir solicitudes prácticamente desde el principio. Ahora la publicidad es una parte bastante importante de nuestras altas.</p>
-            <figcaption class="testimonial__sector">Gimnasio</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">DP</span><span class="testimonial__sector">Gimnasio</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Hasta ahora casi todos los clientes nos llegaban por recomendación. No teníamos ni idea de cómo funcionaba captar clientes por internet. Empezamos con Tabú y en poco tiempo ya teníamos personas preguntando por presupuestos todas las semanas.</p>
-            <figcaption class="testimonial__sector">Empresa de reformas</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">JM</span><span class="testimonial__sector">Empresa de reformas</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Habíamos hecho publicidad antes, pero sinceramente nunca sabíamos si nos estaba sirviendo para algo. Con Tabú empezamos a ver una relación mucho más clara entre las campañas y las reservas. Y eso nos ha permitido invertir con mucha más tranquilidad.</p>
-            <figcaption class="testimonial__sector">Restaurante</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">CV</span><span class="testimonial__sector">Restaurante</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Tenía claro que el producto funcionaba, pero conseguir alumnos nuevos era otra historia. Con Tabú encontramos una forma de llegar a gente que realmente estaba interesada y las ventas empezaron a crecer bastante.</p>
-            <figcaption class="testimonial__sector">Academia online</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">PL</span><span class="testimonial__sector">Academia online</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Nuestro problema no era conseguir formularios, era conseguir buenos contactos. Antes nos llegaban muchos leads que luego no tenían nada que ver con nuestro cliente. Cambiamos la estrategia con Tabú y la calidad de las oportunidades mejoró muchísimo.</p>
-            <figcaption class="testimonial__sector">Empresa B2B</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">RT</span><span class="testimonial__sector">Empresa B2B</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Habíamos trabajado con un par de agencias y siempre terminábamos con la sensación de que estábamos tirando el dinero. Con Tabú fue diferente porque desde el principio entendieron qué queríamos conseguir y empezamos a notar más reservas que venían directamente de las campañas.</p>
-            <figcaption class="testimonial__sector">Fisioterapia</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">NC</span><span class="testimonial__sector">Fisioterapia</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Dependíamos demasiado de nuestros clientes habituales y nos costaba muchísimo conseguir compradores nuevos. Empezamos a trabajar Meta Ads con Tabú y conseguimos aumentar bastante las ventas online sin tener que estar haciendo promociones todo el rato.</p>
-            <figcaption class="testimonial__sector">E-commerce de alimentación</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">SB</span><span class="testimonial__sector">E-commerce de alimentación</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Llevábamos tiempo intentando hacer funcionar la publicidad y no terminábamos de encontrar la tecla. Con Tabú cambiamos el enfoque y empezamos a recibir muchas más solicitudes. Lo mejor es que ahora sabemos mucho mejor qué está funcionando y qué no.</p>
-            <figcaption class="testimonial__sector">Empresa de formación</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">FD</span><span class="testimonial__sector">Empresa de formación</span></figcaption>
           </figure>
-          <figure class="testimonial">
+          <figure class="testimonial"><div class="testimonial__stars" aria-hidden="true">★★★★★</div>
             <p class="testimonial__quote">Después de una mala experiencia con otra agencia estábamos bastante desconfiados con volver a invertir en publicidad. Tabú nos convenció de probar otra vez y la verdad es que el cambio se notó. Hemos conseguido muchas más oportunidades de captación y hemos recuperado la confianza en el canal.</p>
-            <figcaption class="testimonial__sector">Inmobiliaria</figcaption>
+            <figcaption class="testimonial__author"><span class="testimonial__avatar">MG</span><span class="testimonial__sector">Inmobiliaria</span></figcaption>
           </figure>
         </div>
       </div>
@@ -2228,14 +2290,16 @@
           <div class="flow-card">
             <span class="flow-card__num">03</span>
             <div class="flow-card__main">
-              <svg class="flow-card__logo" viewBox="0 0 46 40" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="3" y="5" width="40" height="30" rx="5"/>
-                <path d="M3 14 H43"/>
-                <circle cx="9" cy="9.5" r="0.9" fill="#ffffff" stroke="none"/>
-                <circle cx="13.5" cy="9.5" r="0.9" fill="#ffffff" stroke="none"/>
-                <circle cx="18" cy="9.5" r="0.9" fill="#ffffff" stroke="none"/>
-                <path d="M10 22 H30"/>
-                <path d="M10 28 H24"/>
+              <svg class="flow-card__logo" viewBox="0 0 44 40" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="3" y="4" width="38" height="32" rx="5"/>
+                <path d="M3 12 H41"/>
+                <circle cx="8" cy="8" r="1" fill="#ffffff" stroke="none"/>
+                <circle cx="12" cy="8" r="1" fill="#ffffff" stroke="none"/>
+                <circle cx="16" cy="8" r="1" fill="#ffffff" stroke="none"/>
+                <rect x="8" y="17" width="12" height="12" rx="2"/>
+                <path d="M25 18 H35"/>
+                <path d="M25 23 H33"/>
+                <rect x="25" y="26" width="10" height="4.5" rx="2.2" fill="#ffd60a" stroke="none"/>
               </svg>
               <span class="flow-card__name">Landing&nbsp;Page</span>
             </div>
@@ -2357,7 +2421,7 @@
           <a href="#about">Tabú</a>
           <a href="#price">Proceso</a>
           <a href="#projects">Ventajas</a>
-          <a href="#testimonios">Testimonios</a>
+          <a href="#testimonios">Opiniones</a>
           <a href="#faq">Preguntas</a>
         </nav>
         <div class="footer__col">
