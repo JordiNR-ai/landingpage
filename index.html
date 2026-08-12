@@ -161,7 +161,7 @@
         width: 100%;
         overflow: hidden;
         margin-top: 24px;
-        padding: 0 16px;
+        padding: 0 8px;
       }
       @media (min-width: 640px) {
         .hero__heading-wrap {
@@ -188,7 +188,7 @@
       .hero__heading-line {
         display: block;
         white-space: nowrap;
-        font-size: 14.5vw;
+        font-size: 15.7vw;
       }
       @media (min-width: 768px) {
         .hero__heading-line {
@@ -712,6 +712,7 @@
         }
       }
       .project-card__category {
+        display: none;
         font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 0.1em;
@@ -722,13 +723,17 @@
           font-size: 14px;
         }
       }
+      @media (min-width: 768px) {
+        .project-card__category {
+          display: block;
+        }
+      }
       .project-card__name {
         font-weight: 500;
         text-transform: uppercase;
-        line-height: 1.25;
+        line-height: 1.2;
         color: #d7e2ea;
-        white-space: nowrap;
-        font-size: clamp(0.9rem, 3.4vw, 3rem);
+        font-size: clamp(1.4rem, 5.2vw, 3rem);
       }
 
       .project-card__images {
@@ -1009,9 +1014,16 @@
       }
       .testimonials__viewport {
         width: 100%;
-        overflow: hidden;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
         -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
         mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+      }
+      .testimonials__viewport::-webkit-scrollbar {
+        display: none;
       }
       .testimonials__track {
         display: flex;
@@ -1019,20 +1031,6 @@
         width: max-content;
         padding: 0 12px;
         align-items: stretch;
-        animation: testimonials-scroll 90s linear infinite;
-        will-change: transform;
-      }
-      .testimonials__viewport:hover .testimonials__track {
-        animation-play-state: paused;
-      }
-      @keyframes testimonials-scroll {
-        from { transform: translateX(0); }
-        to { transform: translateX(-50%); }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .testimonials__track {
-          animation: none;
-        }
       }
       .testimonial {
         flex-shrink: 0;
@@ -1604,6 +1602,13 @@
       @media (min-width: 640px) {
         .wa-float { left: 28px; bottom: 28px; }
       }
+      /* Responsive copy: long version on desktop, short on mobile */
+      .copy-long { display: none; }
+      .copy-short { display: inline; }
+      @media (min-width: 768px) {
+        .copy-long { display: inline; }
+        .copy-short { display: none; }
+      }
     </style>
   </head>
   <body>
@@ -1777,7 +1782,7 @@
           <div class="service-item__body">
             <h3 class="service-item__name">Nos conocemos</h3>
             <p class="service-item__desc">
-              Antes de hablar de campañas, queremos entender tu negocio, tus objetivos y qué frena tu crecimiento.
+              <span class="copy-long">Las mejores estrategias nacen de una buena conversación. Antes de hablar de campañas, queremos entender tu negocio, tus objetivos y qué está frenando tu crecimiento.</span><span class="copy-short">Antes de hablar de campañas, queremos entender tu negocio, tus objetivos y qué frena tu crecimiento.</span>
             </p>
           </div>
         </div>
@@ -1786,7 +1791,7 @@
           <div class="service-item__body">
             <h3 class="service-item__name">Investigamos</h3>
             <p class="service-item__desc">
-              Analizamos tu mercado y tu competencia para detectar las oportunidades de tu negocio.
+              <span class="copy-long">Analizamos tu mercado, estudiamos a tu competencia e identificamos las oportunidades para crear una estrategia adaptada a tu punto de partida.</span><span class="copy-short">Analizamos tu mercado y tu competencia para detectar las oportunidades de tu negocio.</span>
             </p>
           </div>
         </div>
@@ -1795,7 +1800,7 @@
           <div class="service-item__body">
             <h3 class="service-item__name">Diseñamos</h3>
             <p class="service-item__desc">
-              Construimos una estrategia personalizada para que cada euro invertido tenga un propósito.
+              <span class="copy-long">Con toda la información recopilada, construimos una estrategia personalizada para que cada euro invertido tenga un propósito.</span><span class="copy-short">Construimos una estrategia personalizada para que cada euro invertido tenga un propósito.</span>
             </p>
           </div>
         </div>
@@ -1804,7 +1809,7 @@
           <div class="service-item__body">
             <h3 class="service-item__name">Estimamos</h3>
             <p class="service-item__desc">
-              Te mostramos una estimación de resultados para que veas el potencial antes de empezar.
+              <span class="copy-long">Te mostramos una estimación de resultados para que conozcas el potencial de la estrategia antes de ponerla en marcha.</span><span class="copy-short">Te mostramos una estimación de resultados para que veas el potencial antes de empezar.</span>
             </p>
           </div>
         </div>
@@ -1916,8 +1921,7 @@
             </div>
             <div class="project-card__text">
               <p class="project-card__desc">
-                No se trata de llegar a todos, sino a las personas correctas. Con Facebook e Instagram
-                definimos a quién mostrar tus anuncios y concentramos el presupuesto donde hay oportunidad.
+<span class="copy-long">No necesitas llegar a todo el mundo. Necesitas llegar a las personas correctas. Facebook e Instagram nos permiten definir con precisión a quién mostrar tus anuncios y concentrar el presupuesto donde realmente existe una oportunidad.</span><span class="copy-short">No se trata de llegar a todos, sino a las personas correctas. Con Facebook e Instagram definimos a quién mostrar tus anuncios y concentramos el presupuesto donde hay oportunidad.</span>
               </p>
             </div>
           </div>
@@ -1936,8 +1940,7 @@
             </div>
             <div class="project-card__text">
               <p class="project-card__desc">
-                Cada campaña nos muestra qué anuncios, públicos y mensajes funcionan y cuáles no. Analizamos
-                esos datos para ajustar la estrategia y hacer que cada euro rinda más.
+<span class="copy-long">No dejamos que los datos se queden en números. Cada campaña nos muestra qué anuncios, públicos y mensajes están generando oportunidades y cuáles no. Analizamos esa información continuamente para tomar mejores decisiones, ajustar la estrategia y hacer que cada campaña sea más eficiente.</span><span class="copy-short">Cada campaña nos muestra qué anuncios, públicos y mensajes funcionan y cuáles no. Analizamos esos datos para ajustar la estrategia y hacer que cada euro rinda más.</span>
               </p>
             </div>
           </div>
@@ -1956,8 +1959,7 @@
             </div>
             <div class="project-card__text">
               <p class="project-card__desc">
-                Identificamos qué campañas dan mejores resultados y ponemos más recursos donde hay potencial.
-                Subimos la inversión poco a poco, siguiendo de cerca las ventas.
+<span class="copy-long">Identificamos qué campañas están generando mejores resultados y ponemos más recursos donde realmente existe potencial. Aumentamos la inversión poco a poco y seguimos de cerca las ventas para seguir creciendo sin gastar más de lo necesario.</span><span class="copy-short">Identificamos qué campañas dan mejores resultados y ponemos más recursos donde hay potencial. Subimos la inversión poco a poco, siguiendo de cerca las ventas.</span>
               </p>
             </div>
           </div>
@@ -2418,6 +2420,70 @@
             },
             { passive: true }
           );
+        })();
+
+        /* ============ Testimonials carousel: auto-scroll + finger drag ============ */
+        (function initTestimonialsCarousel() {
+          var vp = document.querySelector('.testimonials__viewport');
+          var track = document.querySelector('.testimonials__track');
+          if (!vp || !track) return;
+
+          var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var SECONDS = 90;
+          var half = 0;
+          var speed = 0.5;
+          var hovering = false;
+          var dragging = false;
+          var paused = false;
+          var resumeTimer = null;
+
+          function measure() {
+            half = track.scrollWidth / 2;
+            speed = half > 0 ? half / (SECONDS * 60) : 0.5;
+          }
+          measure();
+          window.addEventListener('resize', measure);
+          window.addEventListener('load', measure);
+          if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+          function update() { paused = hovering || dragging; }
+
+          function wrap() {
+            if (half <= 0) return;
+            if (vp.scrollLeft >= half) vp.scrollLeft -= half;
+            else if (vp.scrollLeft <= 0) vp.scrollLeft += half;
+          }
+          vp.addEventListener('scroll', wrap, { passive: true });
+
+          // pause on hover (only pointers that can hover, i.e. desktop)
+          if (window.matchMedia('(hover: hover)').matches) {
+            vp.addEventListener('mouseenter', function () { hovering = true; update(); });
+            vp.addEventListener('mouseleave', function () { hovering = false; update(); });
+          }
+          // pause while dragging with finger/pointer, resume shortly after release
+          vp.addEventListener('pointerdown', function () {
+            dragging = true;
+            if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = null; }
+            update();
+          });
+          function release() {
+            if (resumeTimer) clearTimeout(resumeTimer);
+            resumeTimer = setTimeout(function () { dragging = false; update(); }, 900);
+          }
+          window.addEventListener('pointerup', release);
+          window.addEventListener('pointercancel', release);
+
+          // start away from the exact edge so it can loop both ways
+          requestAnimationFrame(function () { if (vp.scrollLeft === 0 && half > 0) vp.scrollLeft = 1; });
+
+          function tick() {
+            if (!paused && !reduce && half > 0) {
+              vp.scrollLeft += speed;
+              if (vp.scrollLeft >= half) vp.scrollLeft -= half;
+            }
+            requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
         })();
 
         /* ================= FAQ accordion ================= */
