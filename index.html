@@ -370,6 +370,11 @@
         }
         .hero__heading {
           text-align: center;
+          /* dark halo so the yellow effect doesn't show behind the title on mobile */
+          filter:
+            drop-shadow(0 0 6px rgba(12, 12, 12, 0.98))
+            drop-shadow(0 0 14px rgba(12, 12, 12, 0.92))
+            drop-shadow(0 0 26px rgba(12, 12, 12, 0.82));
         }
         .hero__heading-line {
           font-size: 17vw;
@@ -854,12 +859,11 @@
         }
       }
       .project-card__category {
-        display: block;
+        display: none;
         font-size: 12px;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
-        font-weight: 600;
-        color: #ffd60a;
+        letter-spacing: 0.1em;
+        color: rgba(215, 226, 234, 0.6);
       }
       @media (min-width: 640px) {
         .project-card__category {
@@ -872,79 +876,11 @@
         }
       }
       .project-card__name {
-        font-weight: 600;
+        font-weight: 500;
         text-transform: uppercase;
-        line-height: 1.15;
+        line-height: 1.2;
         color: #d7e2ea;
-        font-size: clamp(1.6rem, 6vw, 3rem);
-      }
-
-      /* ---- redesigned project cards: giant number + animated graphic ---- */
-      .project-card__top {
-        align-items: flex-start;
-      }
-      .project-card__graphic {
-        flex-shrink: 0;
-        width: 54px;
-        height: 54px;
-        margin-top: 4px;
-      }
-      @media (min-width: 768px) {
-        .project-card__graphic {
-          width: 84px;
-          height: 84px;
-        }
-      }
-      .project-card__graphic svg {
-        width: 100%;
-        height: 100%;
-        display: block;
-      }
-      .project-card__meta {
-        margin-top: 10px;
-        gap: 8px;
-      }
-      /* diana pulse */
-      .pc-pulse {
-        transform-box: fill-box;
-        transform-origin: center;
-        animation: pcPulse 2.6s ease-out infinite;
-      }
-      @keyframes pcPulse {
-        0% { transform: scale(0.4); opacity: 0.85; }
-        70%, 100% { transform: scale(1.7); opacity: 0; }
-      }
-      /* rising bars */
-      .pc-bar {
-        transform-box: fill-box;
-        transform-origin: bottom;
-        animation: pcBar 2.4s ease-in-out infinite;
-      }
-      .pc-bar2 { animation-delay: 0.2s; }
-      .pc-bar3 { animation-delay: 0.4s; }
-      @keyframes pcBar {
-        0%, 100% { transform: scaleY(0.35); }
-        50% { transform: scaleY(1); }
-      }
-      /* growth line + dot */
-      .pc-line {
-        stroke-dasharray: 72;
-        stroke-dashoffset: 72;
-        animation: pcDraw 2.8s ease-in-out infinite;
-      }
-      @keyframes pcDraw {
-        0% { stroke-dashoffset: 72; }
-        45%, 100% { stroke-dashoffset: 0; }
-      }
-      .pc-dot {
-        transform-box: fill-box;
-        transform-origin: center;
-        animation: pcDot 2.8s ease-in-out infinite;
-      }
-      @keyframes pcDot {
-        0%, 40% { opacity: 0; transform: scale(0.2); }
-        55% { opacity: 1; transform: scale(1.35); }
-        70%, 100% { opacity: 1; transform: scale(1); }
+        font-size: clamp(1.4rem, 5.2vw, 3rem);
       }
 
       .project-card__images {
@@ -3379,7 +3315,7 @@
           gl.uniform2f(u.uGridMul, gmx, gmy);
           // the CRT curvature looks exaggerated on tall/narrow (mobile) viewports,
           // so ease it down as the screen gets narrower.
-          var curv = P.curvature * Math.min(1, Math.max(0.3, (w - 320) / 900));
+          var curv = w < 768 ? 0 : P.curvature * Math.min(1, (w - 500) / 900);
           gl.uniform1f(u.uCurvature, curv);
         }
         if (window.ResizeObserver) {
