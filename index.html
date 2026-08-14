@@ -359,6 +359,38 @@
         will-change: transform;
       }
 
+      /* ---- mobile hero: shorter, centered title with subtitle + CTA grouped ---- */
+      @media (max-width: 767px) {
+        .hero {
+          height: 78vh;
+          min-height: 560px;
+        }
+        .hero__heading-wrap {
+          margin-top: auto;
+          padding: 0 6px;
+        }
+        .hero__heading {
+          text-align: center;
+        }
+        .hero__heading-line {
+          font-size: 17vw;
+        }
+        .hero__bottom {
+          margin-top: 22px;
+          margin-bottom: auto;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          padding: 0 24px;
+        }
+        .hero__tagline {
+          max-width: 340px;
+          text-align: center;
+          font-size: clamp(1.05rem, 4.4vw, 1.45rem);
+        }
+      }
+
       /* ---------- Marquee ---------- */
       .marquee {
         overflow: hidden;
@@ -1766,6 +1798,27 @@
       @media (min-width: 768px) {
         .copy-long { display: inline; }
         .copy-short { display: none; }
+      }
+
+      /* ---- bigger section titles on mobile ---- */
+      @media (max-width: 767px) {
+        .about__title,
+        .services__title,
+        .projects__title,
+        .founder__title,
+        .testimonials__title,
+        .faq__title {
+          font-size: clamp(3.4rem, 15vw, 160px);
+        }
+        .footer__cta-title {
+          font-size: clamp(3rem, 14vw, 7rem);
+        }
+        .multichannel__title {
+          font-size: clamp(2rem, 10vw, 160px);
+        }
+        .stats__title {
+          font-size: clamp(2.2rem, 7vw, 3.4rem);
+        }
       }
     </style>
   </head>
@@ -3258,7 +3311,7 @@
           gl.uniform2f(u.uGridMul, gmx, gmy);
           // the CRT curvature looks exaggerated on tall/narrow (mobile) viewports,
           // so ease it down as the screen gets narrower.
-          var curv = P.curvature * Math.min(1, Math.max(0.4, w / 900));
+          var curv = P.curvature * Math.min(1, Math.max(0.3, (w - 320) / 900));
           gl.uniform1f(u.uCurvature, curv);
         }
         if (window.ResizeObserver) {
@@ -3306,6 +3359,30 @@
             });
           }, { threshold: 0 }).observe(container);
         }
+      })();
+    </script>
+
+    <!-- ============ MOBILE HERO TITLE: fill available width (biggest that fits) ============ -->
+    <script>
+      (function () {
+        var wrap = document.querySelector('.hero__heading-wrap');
+        var lines = Array.prototype.slice.call(document.querySelectorAll('.hero__heading-line'));
+        if (!wrap || !lines.length) return;
+        function fit() {
+          lines.forEach(function (l) { l.style.fontSize = ''; });
+          if (window.innerWidth >= 768) return; // desktop keeps its CSS size
+          var cs = getComputedStyle(wrap);
+          var avail = wrap.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+          var maxW = 0, fs = parseFloat(getComputedStyle(lines[0]).fontSize);
+          lines.forEach(function (l) { maxW = Math.max(maxW, l.scrollWidth); });
+          if (maxW > 0) {
+            var nf = fs * (avail / maxW) * 0.99;
+            lines.forEach(function (l) { l.style.fontSize = nf + 'px'; });
+          }
+        }
+        fit();
+        window.addEventListener('resize', fit);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
       })();
     </script>
   </body>
