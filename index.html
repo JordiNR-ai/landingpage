@@ -362,8 +362,7 @@
       /* ---- mobile hero: shorter, centered title with subtitle + CTA grouped ---- */
       @media (max-width: 767px) {
         .hero {
-          height: 78vh;
-          min-height: 560px;
+          height: 100vh;
         }
         .hero__heading-wrap {
           margin-top: auto;
@@ -855,11 +854,12 @@
         }
       }
       .project-card__category {
-        display: none;
+        display: block;
         font-size: 12px;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: rgba(215, 226, 234, 0.6);
+        letter-spacing: 0.12em;
+        font-weight: 600;
+        color: #ffd60a;
       }
       @media (min-width: 640px) {
         .project-card__category {
@@ -872,11 +872,79 @@
         }
       }
       .project-card__name {
-        font-weight: 500;
+        font-weight: 600;
         text-transform: uppercase;
-        line-height: 1.2;
+        line-height: 1.15;
         color: #d7e2ea;
-        font-size: clamp(1.4rem, 5.2vw, 3rem);
+        font-size: clamp(1.6rem, 6vw, 3rem);
+      }
+
+      /* ---- redesigned project cards: giant number + animated graphic ---- */
+      .project-card__top {
+        align-items: flex-start;
+      }
+      .project-card__graphic {
+        flex-shrink: 0;
+        width: 54px;
+        height: 54px;
+        margin-top: 4px;
+      }
+      @media (min-width: 768px) {
+        .project-card__graphic {
+          width: 84px;
+          height: 84px;
+        }
+      }
+      .project-card__graphic svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .project-card__meta {
+        margin-top: 10px;
+        gap: 8px;
+      }
+      /* diana pulse */
+      .pc-pulse {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: pcPulse 2.6s ease-out infinite;
+      }
+      @keyframes pcPulse {
+        0% { transform: scale(0.4); opacity: 0.85; }
+        70%, 100% { transform: scale(1.7); opacity: 0; }
+      }
+      /* rising bars */
+      .pc-bar {
+        transform-box: fill-box;
+        transform-origin: bottom;
+        animation: pcBar 2.4s ease-in-out infinite;
+      }
+      .pc-bar2 { animation-delay: 0.2s; }
+      .pc-bar3 { animation-delay: 0.4s; }
+      @keyframes pcBar {
+        0%, 100% { transform: scaleY(0.35); }
+        50% { transform: scaleY(1); }
+      }
+      /* growth line + dot */
+      .pc-line {
+        stroke-dasharray: 72;
+        stroke-dashoffset: 72;
+        animation: pcDraw 2.8s ease-in-out infinite;
+      }
+      @keyframes pcDraw {
+        0% { stroke-dashoffset: 72; }
+        45%, 100% { stroke-dashoffset: 0; }
+      }
+      .pc-dot {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: pcDot 2.8s ease-in-out infinite;
+      }
+      @keyframes pcDot {
+        0%, 40% { opacity: 0; transform: scale(0.2); }
+        55% { opacity: 1; transform: scale(1.35); }
+        70%, 100% { opacity: 1; transform: scale(1); }
       }
 
       .project-card__images {
