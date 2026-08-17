@@ -665,6 +665,7 @@
         margin: 0 auto;
       }
       .service-item {
+        position: relative;
         display: flex;
         align-items: center;
         gap: 24px;
@@ -717,19 +718,21 @@
         opacity: 0.68;
         font-size: clamp(1rem, 2vw, 1.35rem);
       }
-      /* decorative icon per Proceso step */
+      /* decorative icon per Proceso step — floats above the row on mobile
+         (out of flex flow) so it never squeezes the title/desc column;
+         on tablet/desktop there's room, so it sits inline as a 3rd column */
       .service-item__icon {
-        flex-shrink: 0;
-        width: 76px;
-        margin-left: 14px;
-        margin-right: 10px;
-        align-self: center;
+        position: absolute;
+        top: 2px;
+        right: 0;
+        width: 62px;
       }
       @media (min-width: 768px) {
         .service-item__icon {
+          position: static;
+          flex-shrink: 0;
           width: 108px;
           margin-left: 24px;
-          margin-right: 0;
           align-self: center;
         }
       }
