@@ -720,14 +720,16 @@
       /* decorative icon per Proceso step */
       .service-item__icon {
         flex-shrink: 0;
-        width: 64px;
+        width: 76px;
         margin-left: 14px;
-        align-self: flex-start;
+        margin-right: 10px;
+        align-self: center;
       }
       @media (min-width: 768px) {
         .service-item__icon {
           width: 108px;
           margin-left: 24px;
+          margin-right: 0;
           align-self: center;
         }
       }
@@ -1710,8 +1712,12 @@
       }
       @media (min-width: 1024px) {
         .footer__calendly {
-          /* wide enough for Calendly's native side-by-side desktop layout */
-          max-width: 1000px;
+          /* Calendly switches from its stacked mobile layout to the native
+             side-by-side desktop layout once the widget's real content area
+             crosses ~1000px — our own 1px border eats 2px off that (box-sizing:
+             border-box), so 1000px exactly landed just under the line and
+             rendered vertical. 1024px clears it with margin. */
+          max-width: 1024px;
         }
       }
       .footer__cta-text {
